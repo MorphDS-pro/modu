@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="img/logo-Empresa.png" type="image/png">
+    <link rel="preload" href="img/logo-Empresa.png" as="image">
+    <link rel="preload" href="assets/dashboard.css" as="style">
+    <link rel="stylesheet" href="assets/dashboard.css">
+</head>
+<body>
+    <div class="container skeleton">
+        <header class="header" id="header">
+            <div class="user-container" id="user-container">
+                <div id="user-icon" class="user-icon">
+                    <img src="" alt="Icono de Usuario" />
+                </div>
+                <div id="options-container" class="options-container hidden">
+                    <a href="#" id="change-password-link" class="formulario-link" data-target="modulos/plataformaWeb-modulo-08_registro_de_usuarios/adm-option03-change_password/adm-option03-change_password.html">
+                        <i class="fas fa-key"></i> Cambiar Contraseña
+                    </a>
+                    <a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-08_registro_de_usuarios/adm-option04-personal_information/adm-option04-personal_information.html">
+                        <i class="fas fa-user"></i> Datos personales
+                    </a>
+                </div>
+                <div id="user-name-container" class="user-name">
+                    <span id="user-name-span">Cargando...</span>
+                </div>
+            </div>
+            
+            <div id="logo-container" class="logo">
+                <img src="img/logo-Empresa.png" alt="Logo" class="logo-img" id="logo-img"> 
+                MorphDS (Administrador)
+            </div>
+            
+            <div id="buttons-container">
+                <div id="date-container" class="date">
+                    <div id="date"></div>
+                </div>
+
+                <button id="change-role-btn" class="logout-btn" aria-label="Cambiar sociedad">
+                    <i class="fas fa-exchange-alt"></i> Cambiar Sociedad
+                </button>
+            
+                <button id="logout-btn" class="logout-btn" aria-label="Cerrar sesión">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+            
+            <div id="logout-confirmation" class="logout-confirmation-container" style="display: none;">
+                <div class="logout-confirmation-content">
+                    <h3><i class="fas fa-exclamation-triangle"></i> ¿Estás seguro de que deseas cerrar sesión?</h3>
+                    <div class="logout-confirmation-buttons">
+                        <button id="confirm-logout" class="btn-confirm">Cerrar sesión</button>
+                        <button id="cancel-logout" class="btn-cancel">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav id="sidebar" class="sidebar open"> 
+            <div class="sidebar-header">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0)" onclick="mostrarPaginaPrincipal()">
+                            <i class="fas fa-home"></i> Página Principal
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="contenedor-principal active">
+                <ul>  
+                    <li><a href="javascript:void(0)" onclick="showSection('implantes')"><i class="fas fa-briefcase-medical" id="icons-icon-implantes"></i>  Implantes <i class="fas fa-check-circle" id="check-icon-implantes"></i></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('consignacion')"><i class="fas fa-box" id="icons-icon-consignacion"></i> Consignación <i class="fas fa-check-circle" id="check-icon-consignacion"></i></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('corporativo')"><i class="fas fa-table" id="icons-icon-corporativo"></i> Corporativo <i class="fas fa-check-circle" id="check-icon-corporativo"></i></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('laboratorio')"><i class="fas fa-flask" id="icons-icon-laboratorio"></i> Laboratorio <i class="fas fa-check-circle" id="check-icon-laboratorio"></i></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('prestaciones')"><i class="fas fa-clipboard-list" id="icons-icon-prestaciones"></i> Prestaciones <i class="fas fa-check-circle" id="check-icon-prestaciones"></i></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('gestion')"><i class="fas fa-user-plus" id="icons-icon-accesos"></i> Registro de Usuarios <i class="fas fa-check-circle" id="check-icon-accesos"></i></a></li>
+                </ul>
+            </div>
+            
+            <div id="implantes" class="contenedor-seccion"> 
+                <h3 onclick="volverAlMenu()">
+                    <span>Implantes</span>
+                    <i class="fas fa-check-circle" id="icon-prestaciones-check"></i>
+                </h3>
+                <ul>
+                    <li><a href="#" class="formulario-link" data-target="modulos/modulo-01-implantes/option01-consumos/consumos.html"><i class="fas fa-boxes" id="icon-consumos"></i> Consumos <i class="fas fa-caret-right" id="icon-codigos-caret"></i></a></li>     
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option02-pacientes/pacientes.html"><i class="fas fa-user-injured" id="icon-pacientes"></i> Pacientes <i class="fas fa-caret-right" id="icon-pacientes-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option04-carpetas/carpetas.html"><i class="fas fa-folder-open" id="icon-carpetas"></i> Carpetas <i class="fas fa-caret-right" id="icon-carpetas-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target=""><i class="fas fa-print id="icon-carpetas"></i> Formulario <i class="fas fa-caret-right" id="icon-carpetas-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/cajas.html"><i class="fas fa-file-medical" id="icon-consignado"></i> Consignado <i class="fas fa-caret-right" id="icon-consignado-caret"></i></a></li>
+                    <hr style="margin: 0; border: 1px solid #ccc;"> 
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option03-historico/historico.html"><i class="fas fa-history" id="icon-historico"></i> Histórico <i class="fas fa-caret-right" id="icon-historico-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-04-implantes/viewPacientes/viewPacientes.html"><i class="fas fa-procedures" id="icon-viewPacientes"></i> View pacientes <i class="fas fa-caret-right" id="icon-viewPacientes-caret"></i></a></li>
+                </ul>
+            </div>
+
+            <div id="consignacion" class="contenedor-seccion"> 
+                <h3 onclick="volverAlMenu()">
+                    <span>Consignación</span>
+                    <i class="fas fa-check-circle" id="icon-consignacion-check"></i>
+                </h3>
+                <ul>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-05_consignacion/adm-option01-ingresos/adm-option01-ingresos.html"><i class="fas fa-sign-in-alt" id="icon-empresas"></i> Ingreso <i class="fas fa-caret-right" id="icon-empresas-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-05_consignacion/adm-option02-historial/adm-option02-historial.html"><i class="fas fa-history" id="icon-ingresos"></i> Historial <i class="fas fa-caret-right" id="icon-ingresos-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-05_consignacion/adm-option02-historial/adm-option02-historial.html"><i class="fas fa-hourglass-end" id="icon-ingresos"></i> Guía (Lote - F/V) <i class="fas fa-caret-right" id="icon-ingresos-caret"></i></a></li>
+                </ul>
+            </div>
+
+            <div id="corporativo" class="contenedor-seccion"> 
+                <h3 onclick="volverAlMenu()">
+                    <span>Corporativo</span>
+                    <i class="fas fa-check-circle" id="icon-prestaciones-check"></i>
+                </h3>
+                <ul>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-09_corporativo/adm-option02-admin_planilla2024/adm-option02-planilla2024.html"><i class="fas fa-table" id="icon-codigos"></i> Planilla 2024<i class="fas fa-caret-right" id="icon-codigos-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-09_corporativo/adm-option01-admin_planilla2025/adm-option01-planilla2025.html"><i class="fas fa-server" id="icon-codigos"></i> Planilla 2025<i class="fas fa-caret-right" id="icon-codigos-caret"></i></a></li>
+                    <hr style="margin: 0; border: 1px solid #ccc;"> 
+                    <li><a href="#" class="formulario-link" data-target=""><i class="fas fa-table" id="icon-codigos"></i> View Planilla 2024<i class="fas fa-caret-right" id="icon-codigos-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-09_corporativo/view-planilla2025/viewPlanilla2025.html"><i class="fas fa-server" id="icon-codigos"></i> View Planilla 2025<i class="fas fa-caret-right" id="icon-codigos-caret"></i></a></li>
+                </ul>
+            </div>
+
+            <div id="prestaciones" class="contenedor-seccion"> 
+                <h3 onclick="volverAlMenu()">
+                    <span>Prestaciones</span>
+                    <i class="fas fa-check-circle" id="icon-prestaciones-check"></i>
+                </h3>
+                <ul>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-07_prestaciones/adm-option01-codigos/codigos.html"><i class="fas fa-file-signature" id="icon-codigos"></i> Códigos <i class="fas fa-caret-right" id="icon-codigos-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target=""><i class="fas fa-users" id="icon-pacientes"></i> Pacientes <i class="fas fa-caret-right" id="icon-pacientes-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-07_prestaciones/adm-option03-medicos/medicos.html"><i class="fas fa-user-md" id="icon-medicos"></i> Médicos <i class="fas fa-caret-right" id="icon-medicos-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-07_prestaciones/adm-option04-previsiones/previsiones.html"><i class="fas fa-calendar-check" id="icon-previsiones"></i> Previsiones <i class="fas fa-caret-right" id="icon-previsiones-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-07_prestaciones/adm-option05-empresas/empresas.html"><i class="fas fa-truck" id="icon-empresas"></i> Empresas <i class="fas fa-caret-right" id="icon-empresas-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-07_prestaciones/adm-option06-unidades-clinicas/adm-option06-unidades-clinicas.html"><i class="fas fa-hospital" id="icon-empresas"></i> Unidades Clínicas <i class="fas fa-caret-right" id="icon-empresas-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-07_prestaciones/adm-option07-contacto-externos/adm-option07-contacto-externos.html"><i class="fas fa-phone" id="icon-contactos"></i> Contactos Externos <i class="fas fa-caret-right" id="icon-contactos-caret"></i></a></li>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-07_prestaciones/adm-option08-contacto-internos/adm-option08-contacto-internos.html"><i class="fas fa-id-card" id="icon-contactos"></i> Contactos Internos <i class="fas fa-caret-right" id="icon-contactos-caret"></i></a></li>
+                </ul>
+            </div>
+
+            <div id="laboratorio" class="contenedor-seccion"> 
+                <h3 onclick="volverAlMenu()">
+                    <span>Laboratorio</span>
+                    <i class="fas fa-check-circle" id="icon-laboratorio-check"></i>
+                </h3>
+                <ul>
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-10_laboratorio/ingresos/lab.html"><i class="fas fa-money-bill-wave" id="icon-ingresos"></i> Ingresos <i class="fas fa-caret-right" id="icon-ingresos-caret"></i></a></li>  
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-10_laboratorio/resumen/resumen.html"><i class="fas fa-chart-pie" id="icon-resumen"></i> Resumen <i class="fas fa-caret-right" id="icon-resumen-caret"></i></a></li> 
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-10_laboratorio/ordenes/ordenes.html"><i class="fas fa-shopping-cart" id="icon-ordenes"></i> Ordenes de compra <i class="fas fa-caret-right" id="icon-ordenes-caret"></i></a></li> 
+                    <hr style="margin: 0; border: 1px solid #ccc;"> 
+                    <li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-10_laboratorio/tabla-ingresos/tabla-ingresos.html"><i class="fas fa-clipboard-list" id="icon-ordenes"></i> Tabla Ingresos <i class="fas fa-caret-right" id="icon-ordenes-caret"></i></a></li>     
+                </ul>
+                
+            </div>
+
+            <div id="gestion" class="contenedor-seccion"> 
+                <h3 onclick="volverAlMenu()">
+                    <span>Registro de Usuarios</span>
+                    <i class="fas fa-check-circle" id="icon-gestion-check"></i>
+                </h3>
+                <ul><li><a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-08_registro_de_usuarios/adm-option02-user_registration/registros.html"><i class="fas fa-user" id="icon-usuarios"></i> Usuarios <i class="fas fa-caret-right" id="icon-usuarios-caret"></i></a></li></ul>
+            </div>
+
+            <div class="sidebar-informacion">
+                <p></p>
+                <div id="clima"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <p>Versión 1.0.3 / 24-03-2025</p>
+            </div>
+        </nav>
+
+        <main class="main-content" id="main-content"></main>
+    </div>
+
+    <div id="changeRoleModal" class="change-role-modal hidden">
+        <div class="change-role-modal-content">
+            <label for="changeRoleSelect">Selecciona la sociedad:</label>
+            <select id="changeRoleSelect"></select>
+            <button type="button" id="changeRoleConfirmBtn">Confirmar</button>
+        </div>
+    </div>
+
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js" defer></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js" defer></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js" defer></script>
+    <script type="module" src="assets/user.js" defer></script>
+    <script src="assets/dashboard.js"></script>
+</body>
+</html>

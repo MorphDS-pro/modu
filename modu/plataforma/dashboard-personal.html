@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="img/logo-Empresa.png" type="image/png">
+    <link rel="preload" href="img/logo-Empresa.png" as="image">
+    <link rel="stylesheet" href="assets/dashboard-personal.css">
+</head>
+<body>
+    <div class="container skeleton">
+        <header class="header" id="header">
+            <div class="user-container" id="user-container">
+                <div id="user-icon" class="user-icon">
+                    <img src="" alt="Icono de Usuario" />
+                </div>
+                <div id="options-container" class="options-container hidden">
+                    <a href="#" id="change-password-link" class="formulario-link" data-target="modulos/plataformaWeb-modulo-08_registro_de_usuarios/adm-option03-change_password/adm-option03-change_password.html">
+                        <i class="fas fa-key"></i> Cambiar Contraseña
+                    </a>
+                    <a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-08_registro_de_usuarios/adm-option04-personal_information/adm-option04-personal_information.html">
+                        <i class="fas fa-user"></i> Datos personales
+                    </a>
+                </div>
+            </div>
+            
+            <div id="user-name-container" class="user-name">
+                <span id="user-name-span">Cargando...</span>
+            </div>
+            
+            <div id="logo-container" class="logo">
+                <img src="img/logo-Empresa.png" alt="Logo" class="logo-img" id="logo-img"> 
+                MorphDS (Personal)
+            </div>
+            
+            <div id="Clima-container" class="Clima">
+                <div id="clima"></div>
+            </div>
+
+            <div id="date-container" class="date">
+                <div id="date"></div>
+            </div>
+
+            <button id="change-role-btn" class="logout-btn" aria-label="Cambiar sociedad">
+                <i class="fas fa-exchange-alt"></i> Cambiar Sociedad
+            </button>
+            
+            <button id="logout-btn" class="logout-btn" aria-label="Cerrar sesión">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </button>
+            
+            <div id="logout-confirmation" class="logout-confirmation-container" style="display: none;">
+                <div class="logout-confirmation-content">
+                    <h3><i class="fas fa-exclamation-triangle"></i> ¿Estás seguro de que deseas cerrar sesión?</h3>
+                    <div class="logout-confirmation-buttons">
+                        <button id="confirm-logout" class="btn-confirm">Cerrar sesión</button>
+                        <button id="cancel-logout" class="btn-cancel">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav id="sidebar" class="sidebar open"> 
+            <div class="sidebar-header">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0)" onclick="mostrarPaginaPrincipal()">
+                            <i class="fas fa-home"></i> Página Principal
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        
+            <div class="sidebar-menu">
+                <ul>
+                    <li>
+                        <a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-05_consignacion/adm-option01-ingresos/adm-option01-ingresos.html">
+                            <i class="fas fa-sign-in-alt" id="icon-empresas"></i> Ingreso
+                            <i class="fas fa-caret-right" id="icon-empresas-caret"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-05_consignacion/adm-option02-historial/adm-option02-historial.html">
+                            <i class="fas fa-history" id="icon-ingresos"></i> Historial
+                            <i class="fas fa-caret-right" id="icon-ingresos-caret"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="formulario-link" data-target="">
+                            <i class="fas fa-table" id="icon-codigos-2024"></i> Planilla 2024
+                            <i class="fas fa-caret-right" id="icon-codigos-caret-2024"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-09_corporativo/view-planilla2025/viewPlanilla2025.html">
+                            <i class="fas fa-server" id="icon-codigos-2025"></i> Planilla 2025
+                            <i class="fas fa-caret-right" id="icon-codigos-caret-2025"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="formulario-link" data-target="modulos/plataformaWeb-modulo-05_consignacion/adm-option02-historial/adm-option02-historial.html">
+                            <i class="fas fa-history" id="icon-ingresos"></i> Guía (Lote - F/V)
+                            <i class="fas fa-caret-right" id="icon-ingresos-caret"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        
+            <div class="sidebar-informacion">
+                <p></p>
+                <div id="clima"></div>
+            </div>
+        
+            <div class="sidebar-footer">
+                <p>Versión 1.0.3 / 24-03-2025</p>
+            </div>
+        </nav>
+
+        <main class="main-content" id="main-content"></main>
+    </div>
+
+    <div id="changeRoleModal" class="change-role-modal hidden">
+        <div class="change-role-modal-content">
+            <label for="changeRoleSelect">Selecciona la sociedad:</label>
+            <select id="changeRoleSelect"></select>
+            <button type="button" id="changeRoleConfirmBtn">Confirmar</button>
+        </div>
+    </div>
+
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js" defer></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js" defer></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js" defer></script>
+    <script type="module" src="assets/user.js" defer></script>
+    <script src="assets/dashboard-personal.js"></script>
+</body>
+</html>
