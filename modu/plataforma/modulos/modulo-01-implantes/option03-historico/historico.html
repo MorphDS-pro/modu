@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Consumos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="historico.css"> 
+</head>
+<body>
+    <div class="container">
+        <h1 id="main-title"> HISTORICO <i class="fas fa-check-circle fa-lg"></i></h1>
+
+        <div class="division" id="division-line"></div>   
+
+        <div class="outer-container" id="tableContainer">
+            <div class="month-filter">
+                <label for="monthSelector">Mes: </label>
+                <select id="monthSelector"></select>
+                <label for="yearSelector">Año: </label>
+                <select id="yearSelector"></select>
+                <button id="pendingFilterBtn" style="margin-left: 10px;">Pendiente</button>
+                <button id="allFilterBtn" style="margin-left: 5px;">Todos</button>
+                <label for="surgeryDateFilter" style="margin-left: 20px;">Fecha Cirugía: </label>
+                <input type="date" id="surgeryDateFilter" style="margin-left: 5px;">
+                <label for="admissionFilter" style="margin-left: 20px;">Admisión: </label>
+                <input type="text" id="admissionFilter" placeholder="Filtrar por admisión" style="margin-left: 5px;">
+                <button id="downloadExcelBtn" style="margin-left: 20px;">Descargar Excel</button>
+            </div>
+          
+            <div class="table-container" id="codigosTable" style="display:block;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Estado
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Previsión
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Admisión Paciente
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Nombre del Paciente
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Médico
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Fecha de Cirugía
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Proveedor
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Código_descripción
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Descripción
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Cantidad Item
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Precio Sistema
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Agrupación
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Total Item
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon"><i class="fas fa-filter"></i></span>Venta
+                                <input type="text" class="filter-input hidden" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody> 
+                </table>
+            </div>
+        
+            <div id="pagination">
+                <button id="btnPrevious"><i class="fas fa-chevron-left"></i> Anterior</button>
+                <span id="pageNumber">Página 1 de </span>
+                <button id="btnNext">Siguiente <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+        
+    </div>
+    <script src="resizer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script type="module" src="historico.js"></script>
+</body>
+</html>

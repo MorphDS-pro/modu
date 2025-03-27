@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensajes de Notificación</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- Cargando iconos de Font Awesome -->
+    <style>
+        .messages-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .message {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            gap: 10px;
+            border-left: 5px solid;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            position: relative;
+            width: 400px;
+        }
+
+        .message.success {
+            border-left-color: #28a745;
+            background-color: #eaf8ed;
+            color: #155724;
+        }
+
+        .message.success i {
+            color: #28a745;
+        }
+
+        .message.warning {
+            border-left-color: #ffc107;
+            background-color: #fff8e5;
+            color: #856404;
+        }
+
+        .message.warning i {
+            color: #ffc107;
+        }
+
+        .message.error {
+            border-left-color: #dc3545;
+            background-color: #fde2e4;
+            color: #721c24;
+        }
+
+        .message.error i {
+            color: #dc3545;
+        }
+
+        .message.info {
+            border-left-color: #17a2b8;
+            background-color: #e4f5f8;
+            color: #0c5460;
+        }
+
+        .message.info i {
+            color: #17a2b8;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0 5px;
+            line-height: 1;
+            transition: color 0.3s ease;
+            position: absolute; /* Añadido para posicionar el botón en la esquina */
+            top: 5px;
+            right: 5px; /* Ajusta la posición para que esté en la esquina superior derecha */
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        @media (max-width: 1200px) {
+            .message {
+                width: 90%;
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            .close-btn {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .message {
+                width: 90%;
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            .close-btn {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .message {
+                width: 100%;
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .close-btn {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="messages-container" id="messagesContainer">
+        <div class="message success hidden" id="messageSuccess">
+            <i class="fas fa-check-circle"></i>
+            <div class="text" id="successText"></div>
+            <button class="close-btn" id="closeMessageSuccess">&times;</button>
+        </div>
+        <div class="message warning hidden" id="messageWarning">
+            <i class="fas fa-exclamation-circle"></i>
+            <div class="text" id="warningText">Advertencia:</div>
+            <button class="close-btn" id="closeMessageWarning">&times;</button>
+        </div>
+        <div class="message error hidden" id="messageError">
+            <i class="fas fa-times-circle"></i>
+            <div class="text" id="errorText">Error: </div>
+            <button class="close-btn" id="closeMessageError">&times;</button>
+        </div>
+        <div class="message info hidden" id="messageInfo">
+            <i class="fas fa-info-circle"></i>
+            <div class="text" id="infoText">Información: </div>
+            <button class="close-btn" id="closeMessageInfo">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        // Simulación de mostrar mensajes
+        function showMessage(type, message) {
+            const messageElement = document.getElementById(`message${type.charAt(0).toUpperCase() + type.slice(1)}`);
+            const textElement = document.getElementById(`${type}Text`);
+            textElement.textContent = message;
+
+            messageElement.classList.remove('hidden');
+            setTimeout(() => {
+                messageElement.classList.add('fade-out');
+                setTimeout(() => messageElement.classList.add('hidden'), 300);
+            }, 3000); // Mensaje se oculta después de 3 segundos
+        }
+
+        // Cerrando mensaje
+        document.getElementById('closeMessageSuccess').onclick = () => {
+            document.getElementById('messageSuccess').classList.add('fade-out');
+        };
+        document.getElementById('closeMessageWarning').onclick = () => {
+            document.getElementById('messageWarning').classList.add('fade-out');
+        };
+        document.getElementById('closeMessageError').onclick = () => {
+            document.getElementById('messageError').classList.add('fade-out');
+        };
+        document.getElementById('closeMessageInfo').onclick = () => {
+            document.getElementById('messageInfo').classList.add('fade-out');
+        };
+
+        // Mostrar algunos mensajes para prueba
+        setTimeout(() => showMessage('success', 'Operación completada correctamente!'), 1000);
+        setTimeout(() => showMessage('warning', 'Esto es una advertencia!'), 4000);
+        setTimeout(() => showMessage('error', 'Ha ocurrido un error!'), 7000);
+        setTimeout(() => showMessage('info', 'Información importante para el usuario!'), 10000);
+    </script>
+
+</body>
+</html>

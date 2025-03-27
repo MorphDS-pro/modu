@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Error Page</title>
+    <link href="../img/error-favicon.png" rel="icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            color: #343a40;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .section-notfound {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .text-center {
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 6rem;
+            color: #dc3545;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+
+        .img-fluid {
+            width: 80%;
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        body {
+            background-color: #f4f6f9;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="d-flex align-items-center justify-content-center vh-100 section-notfound">
+		<div class="text-center">
+			<p class="fs-3">
+				<img src="../img/404.png" class="img-fluid" alt="image">
+			</p>
+			<h1 class="display-1 fw-bold">404</h1>
+			<p class="fs-3"> <span class="text-danger">Oops!</span> Page not found</p>
+			<p class="lead">
+				The page you are looking for doesn’t exist.
+			</p>
+		</div>
+	</div>
+
+</body>
+</html>

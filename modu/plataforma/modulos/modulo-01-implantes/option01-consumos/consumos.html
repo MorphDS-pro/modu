@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Consumos</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <link rel="stylesheet" href="consumos.css">
+
+    </head>
+    <body>
+        <div class="container" id="main-container">
+            <h1 id="main-title"> Consumos <i class="fas fa-check-circle fa-lg"></i></h1>
+            <div id="user-name-container" class="user-name" style="display: none;">
+                <span id="user-name-span">Cargando usuario...</span>
+            </div>
+
+            <script type="module" src="userName.js"></script>
+
+            <div class="division" id="division-line"></div>   
+
+            <div class="form-container" id="formContainer"> 
+                <form class="form-register-container" id="formRegisterContainer">
+                    <h2 id="register-title">Formulario de Registro</h2>
+                    
+                    <div class="form-row-register">
+                        <div class="form-group-register" id="register-usuario">
+                            <label for="registerUsuario" style="font-size: 12px;">Digitado por:</label>
+                            <span id="registerUsuario" style="font-size: 10px;"></span>
+                        </div>
+            
+                        <div class="form-group-register" id="register-admission">
+                            <label for="registerAdmission">Admisión</label>
+                            <input type="text" id="registerAdmission" placeholder="Ingrese la admisión"  autocomplete="off">
+                        </div>
+            
+                        <div class="form-group-register" id="register-quote">
+                            <label for="registerQuote">Cotización</label>
+                            <input type="text" id="registerQuote" placeholder="Ingrese la cotización"  autocomplete="off">
+                        </div>
+            
+                        <div class="form-group-register" id="register-reference">
+                            <label for="registerReference">Referencia</label>
+                            <input type="text" id="registerReference" placeholder="Ingrese la referencia"  autocomplete="off">
+                        </div>
+            
+                        <div class="form-group-register" id="register-quantity-1">
+                            <label for="registerQuantity1">Cantidad</label>
+                            <input type="number" id="registerQuantity1" placeholder="Ingrese la cantidad" min="0"  autocomplete="off">
+                        </div>
+
+                        <div class="form-group-register" id="register-detalle">
+                            <label for="registerDetalle">Detalles</label>
+                            <input type="text" id="registerDetalle" placeholder="" readonly  autocomplete="off">
+                            <ul id="detallesOptions" class="custom-datalist" style="display: none;"></ul>
+                        </div>
+            
+                        <div class="form-group-register" id="register-insurance">
+                            <label for="registerInsurance">Previsión</label>
+                            <input type="text" id="registerInsurance" placeholder="" readonly  autocomplete="off">
+                            <ul id="insuranceOptions" class="custom-datalist" style="display: none;"></ul>
+                        </div>
+            
+                        <div class="form-group-register" id="register-patient">
+                            <label for="registerPatient">Paciente</label>
+                            <input type="text" id="registerPatient" placeholder="" readonly  autocomplete="off">
+                        </div>
+            
+                        <div class="form-group-register" id="register-doctor">
+                            <label for="registerDoctor">Médico</label>
+                            <input type="text" id="registerDoctor" placeholder="" readonly  autocomplete="off">
+                            <ul id="doctorOptions" class="custom-datalist" style="display: none;"></ul>
+                        </div>
+            
+                    </div>
+            
+                    <div class="form-row-register">
+                        <div class="form-group-register" id="register-surgery-date">
+                            <label for="registerSurgeryDate">Fecha de Cx</label>
+                            <input type="date" id="registerSurgeryDate" readonly  autocomplete="off">
+                        </div>
+            
+                        <div class="form-group-register" id="register-provider">
+                            <label for="registerProvider">Proveedor</label>
+                            <input type="text" id="registerProvider" placeholder="" readonly  autocomplete="off">
+                            <ul id="providerOptions" class="custom-datalist" style="display: none;"></ul>
+                        </div>
+                        <div class="form-group-register" id="register-code">
+                            <label for="registerCode">Código</label>
+                            <input type="text" id="registerCode" placeholder="" readonly  autocomplete="off">
+                        </div>
+            
+                        <div class="form-group-register" id="register-description">
+                            <label for="registerDescription">Descripción</label>
+                            <input type="text" id="registerDescription" placeholder="" readonly  autocomplete="off">
+                        </div>
+            
+                        <div class="form-group-register" id="register-system-price">
+                            <label for="registerSystemPrice">Precio de Sistema</label>
+                            <input type="number" id="registerSystemPrice" placeholder="" step="0.01" readonly  autocomplete="off">
+                        </div>
+            
+                        <div class="form-group-register" id="register-grouping">
+                            <label for="registerGrouping">Agrupación</label>
+                            <input type="text" id="registerGrouping" placeholder="" readonly  autocomplete="off">
+                        </div>
+            
+                        <div class="bttn-container-register" id="register-button-container">
+                            <button type="submit" class="btn-save-register" id="btnSave">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                            <button type="reset" class="btn-reset-register" id="btnReset">
+                                <i class="fas fa-rotate-left"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <script>
+                const inputUsuario = document.getElementById('registerUsuario');
+                inputUsuario.setAttribute('readonly', true);
+            </script>
+
+            <div class="outer-container" id="tableContainer">
+                <div class="month-filter">
+                    <label for="monthSelector">Mes: </label>
+                    <select id="monthSelector" aria-label="Seleccionar mes"></select>
+                    <label for="yearSelector">Año: </label>
+                    <select id="yearSelector" aria-label="Seleccionar año"></select>
+                    <button id="pendingFilterBtn" style="margin-left: 10px;" aria-label="Filtrar registros pendientes">Pendiente</button>
+                    <button id="allFilterBtn" style="margin-left: 5px;" aria-label="Mostrar todos los registros">Todos</button>
+                    <label style="margin-left: 10px;">
+                        <input type="checkbox" id="allFilterToggle" aria-label="Filtrar todos los registros sin restricción de mes"> Filtrar todos los registros
+                    </label>
+                    <button id="btnDownload" class="btn-download" aria-label="Descargar tabla en Excel">
+                        Descargar Excel <i class="fas fa-download"></i>
+                    </button>
+                    <button id="btnDownloadFormat" class="btn-download" aria-label="Descargar formato en Excel">
+                        Descargar Formato <i class="fas fa-file-excel"></i>
+                    </button>
+                    <button id="btnImportExcel" class="btn-import" aria-label="Importar datos desde Excel">
+                        Importar Excel <i class="fas fa-upload"></i>
+                    </button>
+                </div>
+
+                <div class="table-container" id="codigosTable" style="display:block;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Acciones"><i class="fas fa-filter"></i></span>
+                                    Acciones
+                                    <label for="filter-actions" class="sr-only">Filtrar Acciones</label>
+                                    <input type="text" id="filter-actions" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Acciones">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Fecha de Ingreso"><i class="fas fa-filter"></i></span>
+                                    Fecha de Ingreso
+                                    <label for="filter-entry-date" class="sr-only">Filtrar Fecha de Ingreso</label>
+                                    <input type="text" id="filter-entry-date" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Fecha de Ingreso">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna ID"><i class="fas fa-filter"></i></span>
+                                    ID
+                                    <label for="filter-id" class="sr-only">Filtrar ID</label>
+                                    <input type="text" id="filter-id" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar ID">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Cotización"><i class="fas fa-filter"></i></span>
+                                    Cotización
+                                    <label for="filter-quote" class="sr-only">Filtrar Cotización</label>
+                                    <input type="text" id="filter-quote" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Cotización">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Referencia"><i class="fas fa-filter"></i></span>
+                                    Referencia
+                                    <label for="filter-reference" class="sr-only">Filtrar Referencia</label>
+                                    <input type="text" id="filter-reference" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Referencia">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Cantidad"><i class="fas fa-filter"></i></span>
+                                    Cantidad
+                                    <label for="filter-quantity" class="sr-only">Filtrar Cantidad</label>
+                                    <input type="text" id="filter-quantity" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Cantidad">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Precio"><i class="fas fa-filter"></i></span>
+                                    Precio
+                                    <label for="filter-price" class="sr-only">Filtrar Precio</label>
+                                    <input type="text" id="filter-price" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Precio">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Detalles"><i class="fas fa-filter"></i></span>
+                                    Detalles
+                                    <label for="filter-details" class="sr-only">Filtrar Detalles</label>
+                                    <input type="text" id="filter-details" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Detalles">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Total Cotización"><i class="fas fa-filter"></i></span>
+                                    Total Cotización
+                                    <label for="filter-total-quote" class="sr-only">Filtrar Total Cotización</label>
+                                    <input type="text" id="filter-total-quote" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Total Cotización">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Total Grupo"><i class="fas fa-filter"></i></span>
+                                    Total Grupo
+                                    <label for="filter-total-group" class="sr-only">Filtrar Total Grupo</label>
+                                    <input type="text" id="filter-total-group" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Total Grupo">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Coincidencia"><i class="fas fa-filter"></i></span>
+                                    Coincidencia
+                                    <label for="filter-match" class="sr-only">Filtrar Coincidencia</label>
+                                    <input type="text" id="filter-match" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Coincidencia">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Fecha de Cargo"><i class="fas fa-filter"></i></span>
+                                    Fecha de Cargo
+                                    <label for="filter-charge-date" class="sr-only">Filtrar Fecha de Cargo</label>
+                                    <input type="text" id="filter-charge-date" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Fecha de Cargo">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Estado"><i class="fas fa-filter"></i></span>
+                                    Estado
+                                    <label for="filter-status" class="sr-only">Filtrar Estado</label>
+                                    <input type="text" id="filter-status" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Estado">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Admisión"><i class="fas fa-filter"></i></span>
+                                    Admisión
+                                    <label for="filter-admission" class="sr-only">Filtrar Admisión</label>
+                                    <input type="text" id="filter-admission" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Admisión">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Código"><i class="fas fa-filter"></i></span>
+                                    Código
+                                    <label for="filter-code" class="sr-only">Filtrar Código</label>
+                                    <input type="text" id="filter-code" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Código">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Cantidad (segunda)"><i class="fas fa-filter"></i></span>
+                                    Cantidad
+                                    <label for="filter-quantity-second" class="sr-only">Filtrar Cantidad (segunda)</label>
+                                    <input type="text" id="filter-quantity-second" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Cantidad (segunda)">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Venta"><i class="fas fa-filter"></i></span>
+                                    Venta
+                                    <label for="filter-sale" class="sr-only">Filtrar Venta</label>
+                                    <input type="text" id="filter-sale" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Venta">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Check"><i class="fas fa-filter"></i></span>
+                                    Check
+                                    <label for="filter-check" class="sr-only">Filtrar Check</label>
+                                    <input type="text" id="filter-check" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Check">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Previsión"><i class="fas fa-filter"></i></span>
+                                    Previsión
+                                    <label for="filter-insurance" class="sr-only">Filtrar Previsión</label>
+                                    <input type="text" id="filter-insurance" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Previsión">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Admisión Paciente"><i class="fas fa-filter"></i></span>
+                                    Admisión Paciente
+                                    <label for="filter-patient-admission" class="sr-only">Filtrar Admisión Paciente</label>
+                                    <input type="text" id="filter-patient-admission" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Admisión Paciente">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Nombre del Paciente"><i class="fas fa-filter"></i></span>
+                                    Nombre del Paciente
+                                    <label for="filter-patient-name" class="sr-only">Filtrar Nombre del Paciente</label>
+                                    <input type="text" id="filter-patient-name" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Nombre del Paciente">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Médico"><i class="fas fa-filter"></i></span>
+                                    Médico
+                                    <label for="filter-doctor" class="sr-only">Filtrar Médico</label>
+                                    <input type="text" id="filter-doctor" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Médico">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Fecha de Cirugía"><i class="fas fa-filter"></i></span>
+                                    Fecha de Cirugía
+                                    <label for="filter-surgery-date" class="sr-only">Filtrar Fecha de Cirugía</label>
+                                    <input type="text" id="filter-surgery-date" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Fecha de Cirugía">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Proveedor"><i class="fas fa-filter"></i></span>
+                                    Proveedor
+                                    <label for="filter-provider" class="sr-only">Filtrar Proveedor</label>
+                                    <input type="text" id="filter-provider" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Proveedor">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Código_descripción"><i class="fas fa-filter"></i></span>
+                                    Código_descripción
+                                    <label for="filter-code-description" class="sr-only">Filtrar Código_descripción</label>
+                                    <input type="text" id="filter-code-description" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Código_descripción">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Descripción"><i class="fas fa-filter"></i></span>
+                                    Descripción
+                                    <label for="filter-description" class="sr-only">Filtrar Descripción</label>
+                                    <input type="text" id="filter-description" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Descripción">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Cantidad Item"><i class="fas fa-filter"></i></span>
+                                    Cantidad Item
+                                    <label for="filter-item-quantity" class="sr-only">Filtrar Cantidad Item</label>
+                                    <input type="text" id="filter-item-quantity" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Cantidad Item">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Precio Sistema"><i class="fas fa-filter"></i></span>
+                                    Precio Sistema
+                                    <label for="filter-system-price" class="sr-only">Filtrar Precio Sistema</label>
+                                    <input type="text" id="filter-system-price" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Precio Sistema">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Agrupación"><i class="fas fa-filter"></i></span>
+                                    Agrupación
+                                    <label for="filter-grouping" class="sr-only">Filtrar Agrupación</label>
+                                    <input type="text" id="filter-grouping" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Agrupación">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Total Item"><i class="fas fa-filter"></i></span>
+                                    Total Item
+                                    <label for="filter-total-item" class="sr-only">Filtrar Total Item</label>
+                                    <input type="text" id="filter-total-item" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Total Item">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Cadena"><i class="fas fa-filter"></i></span>
+                                    Cadena
+                                    <label for="filter-chain" class="sr-only">Filtrar Cadena</label>
+                                    <input type="text" id="filter-chain" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Cadena">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Margen"><i class="fas fa-filter"></i></span>
+                                    Margen
+                                    <label for="filter-margin" class="sr-only">Filtrar Margen</label>
+                                    <input type="text" id="filter-margin" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Margen">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Fecha de Creación"><i class="fas fa-filter"></i></span>
+                                    Fecha de Creación
+                                    <label for="filter-creation-date" class="sr-only">Filtrar Fecha de Creación</label>
+                                    <input type="text" id="filter-creation-date" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Fecha de Creación">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" aria-label="Filtrar columna Usuario"><i class="fas fa-filter"></i></span>
+                                    Usuario
+                                    <label for="filter-user" class="sr-only">Filtrar Usuario</label>
+                                    <input type="text" id="filter-user" class="filter-input hidden" placeholder="Filtrar..." aria-label="Filtrar Usuario">
+                                    <span class="resizer"></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+
+                <div id="pagination">
+                    <button id="btnPrevious" aria-label="Página anterior"><i class="fas fa-chevron-left"></i> Anterior</button>
+                    <span id="pageNumber">Página 1 de </span>
+                    <span id="totalRecords">Total: 0 registros</span>
+                    <button id="btnNext" aria-label="Página siguiente">Siguiente <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <script src="resizer.js"></script>
+        
+            <div class="overlay hidden" id="spinnerOverlay">
+                <div class="spinner-container" aria-labelledby="progress">
+                    <div class="progress-spinner" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-circle-bg"></div>
+                        <div class="progress-circle"></div>
+                        <div class="progress-text" id="progress" aria-live="polite">0%</div>
+                    </div>
+                    <div class="side-text" id="spinnerText" aria-hidden="true">Cargando...</div>
+                </div>
+            </div>            
+            
+            <div class="messages-container" id="messagesContainer">
+                <div class="message success hidden" id="messageSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="text" id="successText"></div>
+                    <button class="close-btn" id="closeMessageSuccess">&times;</button>
+                </div>
+                <div class="message warning hidden" id="messageWarning">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="text" id="warningText">Advertencia:</div>
+                    <button class="close-btn" id="closeMessageWarning">&times;</button>
+                </div>
+                <div class="message error hidden" id="messageError">
+                    <i class="fas fa-times-circle"></i>
+                    <div class="text" id="errorText">Error: </div>
+                    <button class="close-btn" id="closeMessageError">&times;</button>
+                </div>
+                <div class="message info hidden" id="messageInfo">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="text" id="infoText">Información: </div>
+                    <button class="close-btn" id="closeMessageInfo">&times;</button>
+                </div>
+            </div>
+            
+            <div class="confirmation-container-new hidden" id="confirmationDeleteContainerNew">
+                <div class="confirmation-dialog-new">
+                    <button class="close-btn-new" id="closeConfirmationDeleteNew">&times;</button>
+                    <div class="icon-container">
+                        <i class="fas fa-exclamation-triangle fa-3x warning-icon"></i>
+                    </div>
+                    <h3 class="confirmation-message">¿Desea eliminar el ítem señalado?</h3>
+                    <div class="confirmation-buttons-new">
+                        <button id="btnConfirmDeleteNew" class="btn-confirm-new">Sí</button>
+                        <button id="btnCancelDeleteNew" class="btn-cancel-new">No</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="editModalOverlay" class="edit-modal-overlay"></div>
+            <div id="editModal" class="edit-modal">
+                <button id="closeEditModal" class="close-btn">×</button>
+                <h2 id="editModalTitle">Editar Consumo</h2>
+                <div id="editModalRow" class="edit-modal-row">
+                    <div class="edit-modal-group">
+                        <label for="editModalAdmission">Admisión</label>
+                        <input type="text" id="editModalAdmission" placeholder="Ingrese la admisión" autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalReference">Referencia</label>
+                        <input type="text" id="editModalReference" placeholder="Ingrese la referencia" autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalQuantity">Cantidad</label>
+                        <input type="number" id="editModalQuantity" placeholder="Ingrese la cantidad" min="0" autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalSystemPrice">Precio Sistema</label>
+                        <input type="number" id="editModalSystemPrice" placeholder="Ingrese el precio" step="0.01" autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalInsurance">Previsión</label>
+                        <input type="text" id="editModalInsurance" readonly autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalPatient">Paciente</label>
+                        <input type="text" id="editModalPatient" readonly autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalDoctor">Médico</label>
+                        <input type="text" id="editModalDoctor" readonly autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalSurgeryDate">Fecha de Cx</label>
+                        <input type="date" id="editModalSurgeryDate" readonly autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalProvider">Proveedor</label>
+                        <input type="text" id="editModalProvider" readonly autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalCode">Código</label>
+                        <input type="text" id="editModalCode" readonly autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalDescription">Descripción</label>
+                        <input type="text" id="editModalDescription" readonly autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalDetails">Detalles</label>
+                        <input type="text" id="editModalDetails" readonly autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalGrouping">Agrupación</label>
+                        <input type="text" id="editModalGrouping" readonly autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalTotalItem">Total Item</label>
+                        <input type="number" id="editModalTotalItem" readonly step="0.01" autocomplete="off">
+                    </div>
+                    <div class="edit-modal-group">
+                        <label for="editModalSale">Venta</label>
+                        <input type="number" id="editModalSale" readonly step="0.01" autocomplete="off">
+                    </div>
+                    <div class="edit-modal-actions">
+                        <button id="saveChangesButton">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overlay hidden" id="overlayImportProgress">
+                <div class="modal-import-progress">
+                    <div class="progress-ring" id="progressRing"></div>
+                    <div class="progress">
+                        <span id="progressText">Importando...</span>
+                        <span id="progressPercentage">0%</span>
+                        <span id="progressTime">Lleva: 0s - Quedan: --</span>
+                    </div>
+                    <button id="cancelImportBtn" class="cancel-btn">Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+        
+        <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+        <script type="module" src="consumos.js"></script>
+        <script type="module" src="importExport.js"></script>
+    </body>
+</html>

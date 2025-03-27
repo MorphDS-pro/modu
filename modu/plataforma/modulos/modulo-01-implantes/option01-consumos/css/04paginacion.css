@@ -1,0 +1,94 @@
+#pagination {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin: 10px 0;
+}
+
+#pagination button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 12px;
+}
+
+#pagination button:hover {
+    background-color: #2980b9;
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+#pagination span {
+    font-size: 12px;
+    margin: 0 10px;
+    color: #333;
+}
+
+#btnPrevious i {
+    color: white;
+    margin-right: 5px;
+}
+
+#btnNext i {
+    color: white;
+    margin-left: 5px;
+}
+
+#totalRecords {
+    font-size: 12px;
+    margin: 0 10px;
+    color: #333;
+}
+
+@media (max-width: 1200px) {
+    #pagination {
+        margin: 12px 0;
+    }
+    #pagination button {
+        padding: 7px 10px;
+        font-size: 11px;
+    }
+    #pagination span {
+        font-size: 11px;
+        margin: 0 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #pagination {
+        justify-content: center;
+        gap: 8px;
+    }
+    #pagination button {
+        padding: 6px 8px;
+        font-size: 10px;
+        margin: 0 3px;
+    }
+    #pagination span {
+        font-size: 10px;
+        margin: 0 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    #pagination {
+        flex-direction: column;
+        gap: 6px;
+    }
+    #pagination button {
+        padding: 5px 7px;
+        font-size: 9px;
+        margin: 3px 0;
+        width: 100%;
+        max-width: 120px;
+    }
+    #pagination span {
+        font-size: 9px;
+        margin: 3px 0;
+    }
+}

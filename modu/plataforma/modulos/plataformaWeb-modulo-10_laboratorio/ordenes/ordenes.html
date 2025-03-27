@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ordenes de Compras</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <link rel="stylesheet" href="ordenes.css">
+    </head>
+    <body>
+        <div class="container" id="main-container">
+            <h1 id="main-title"> Ordenes de compras<i class="fas fa-check-circle fa-lg"></i></h1>
+
+            <div class="division" id="division-line"></div>   
+
+            <div class="outer-container" id="tableContainer">
+                <div class="month-filter">
+                    <label for="monthSelector">Mes: </label>
+                    <select id="monthSelector"></select>
+                    <label for="yearSelector">Año: </label>
+                    <select id="yearSelector"></select>
+                    <button id="pendingFilterBtn" style="margin-left: 10px;">Pendiente</button>
+                    <button id="allFilterBtn" style="margin-left: 5px;">Todas</button>
+                    <button id="downloadExcelBtn" style="margin-left: 20px;">Descargar Excel</button>
+                    <button id="btnDownload" class="btn-download">Vaciar BD <i class="fas fa-download"></i></button>
+                    <button id="btnImport" class="btn-import">Importar Excel <i class="fas fa-upload"></i></button>
+                    <button id="btnFormat" class="btn-format">Formato <i class="fas fa-file-excel"></i></button>
+                </div>
+                <div class="table-container" id="codigosTable" style="display:block;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(0)"><i class="fas fa-filter"></i></span>Oc
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(0)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(1)"><i class="fas fa-filter"></i></span>Generación
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(1)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(2)"><i class="fas fa-filter"></i></span>Autorización
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(2)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(3)"><i class="fas fa-filter"></i></span>Sociedad
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(3)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(4)"><i class="fas fa-filter"></i></span>Tipo de compra
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(4)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(5)"><i class="fas fa-filter"></i></span>Proveedor
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(5)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(6)"><i class="fas fa-filter"></i></span>Digitador
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(6)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(7)"><i class="fas fa-filter"></i></span>Nivel Actual
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(7)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(8)"><i class="fas fa-filter"></i></span>Nivel OC
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(8)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(9)"><i class="fas fa-filter"></i></span>Liberada
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(9)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(10)"><i class="fas fa-filter"></i></span>Total
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(10)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(11)"><i class="fas fa-filter"></i></span>Estado
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(11)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+
+                <div id="pagination">
+                    <button id="btnPrevious"><i class="fas fa-chevron-left"></i> Anterior</button>
+                    <span id="pageNumber">Página 1 de </span>
+                    <button id="btnNext">Siguiente <i class="fas fa-chevron-right"></i></button>
+                    <span id="recordCount"></span>
+                </div>
+            </div>
+
+            <script src="resizer.js"></script>
+            
+            <div class="overlay-loading hidden" id="overlayLoading">
+                <div class="modal-loading">
+                    <div class="lds-dual-ring-progress">
+                        <div class="progress-ring" id="progressRingLoading"></div>
+                    </div>
+                    <div class="progress">
+                        <span>Cargando registros... <span id="progressPercentageLoading">0%</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overlay-import hidden" id="overlayImport">
+                <div class="modal-import">
+                    <div class="spinner"></div>
+                    <div class="progress">
+                        <span>Importando datos: <span id="progress-text">0%</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overlay-delete hidden" id="overlayDelete">
+                <div class="modal-delete">
+                    <div class="spinner"></div>
+                    <div class="progress">
+                        <span>Eliminando registros: <span id="delete-progress-text">0%</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+        <script type="module" src="ordenes.js"></script>
+    
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
+    </body>
+</html>

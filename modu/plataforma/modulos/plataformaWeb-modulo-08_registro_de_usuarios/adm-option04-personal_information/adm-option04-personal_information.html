@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="perfil-usuario.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <i class="fas fa-user-circle"></i>
+                <h3 id="user-name-h3">Cargando...</h3>  <!-- Aquí el nombre se va a cargar dinámicamente -->
+            </div>             
+        
+            <div class="data-item">
+                <span class="label">RUT:</span>
+                <span class="data rut"></span>
+            </div>
+            <div class="data-item">
+                <span class="label">Correo Electrónico:</span>
+                <span class="data email"></span>
+            </div>
+            <div class="data-item">
+                <span class="label">Identidad:</span>
+                <span class="data identidad"></span>
+            </div>
+            <div class="data-item">
+                <span class="label">Nombre de Usuario:</span>
+                <span class="data nombreUsuario"></span>
+            </div>
+            <div class="data-item">
+                <span class="label">Cargo:</span>
+                <span class="data cargo"></span>
+            </div>
+            
+        </div>
+        
+
+        <div class="footer">
+            <p>¿Necesitas más información? <a href="#">Contáctanos</a></p>
+        </div>
+    </div>
+    <script type="module" src="perfil-Usuario.js"></script>
+
+</body>
+</html>

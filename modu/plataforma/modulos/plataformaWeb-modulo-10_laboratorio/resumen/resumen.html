@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Laboratorio</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <link rel="stylesheet" href="resumen.css">
+    </head>
+    <body>
+        <div class="container" id="main-container">
+            <h1 id="main-title"> Ingresos de facturas <i class="fas fa-check-circle fa-lg"></i></h1>
+    
+            <div class="outer-container" id="tableContainer">
+                <div class="month-filter">
+                    <label for="yearSelector">Año: </label>
+                    <select id="yearSelector"></select>
+                    <button id="btnDownload" class="btn-download">Descargar Excel <i class="fas fa-download"></i></button>
+                </div>
+                <div class="table-container" id="codigosTable" style="display:block;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(0)"><i class="fas fa-filter"></i></span>mes
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(0)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(1)"><i class="fas fa-filter"></i></span>Factura-Acta
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(1)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(2)"><i class="fas fa-filter"></i></span>Salidas
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(2)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(3)"><i class="fas fa-filter"></i></span>Proyectado
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(3)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(4)"><i class="fas fa-filter"></i></span>Porcentaje
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(4)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody> 
+                    </table>
+                </div>
+
+            </div>
+
+            <script src="resizer.js"></script>
+
+        </div>
+        
+        <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+        <script type="module" src="resumen.js"></script>
+    </body>
+</html>

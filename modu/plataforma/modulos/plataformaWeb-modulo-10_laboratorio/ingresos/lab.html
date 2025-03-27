@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Laboratorio</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <link rel="stylesheet" href="lab.css">
+    </head>
+    <body>
+        <div class="container" id="main-container">
+            <h1 id="main-title"> Ingresos de facturas <i class="fas fa-check-circle fa-lg"></i></h1>
+            <div id="user-name-container" class="user-name" style="display: none;">
+                <span id="user-name-span">Cargando usuario...</span>
+            </div>
+
+            <script type="module" src="userName.js"></script>
+
+            <div class="division" id="division-line"></div>   
+
+            <form class="form-register-container" id="formRegisterContainer">
+                <h2 id="register-title">Formulario de Registro</h2>
+                <div class="form-row-register">
+                    <div class="form-group-register" id="register-usuario">
+                        <label for="registerUsuario" style="font-size: 12px;">Digitado por:</label>
+                        <span id="registerUsuario" style="font-size: 10px;"></span>
+                    </div>
+                    <div class="form-group-register" id="register-invoice">
+                        <label for="registerInvoice">Factura</label>
+                        <input type="text" id="registerInvoice" placeholder="Ingrese el número de factura" autocomplete="off" pattern="[0-9]*" inputmode="numeric">
+                    </div>
+                    <div class="form-group-register" id="register-issue-date">
+                        <label for="registerIssueDate">Fecha de Emisión</label>
+                        <input type="date" id="registerIssueDate" onclick="this.showPicker()">
+                    </div>
+                    <div class="form-group-register" id="register-invoice-amount">
+                        <label for="registerInvoiceAmount">Monto de la Factura</label>
+                        <input type="text" id="registerInvoiceAmount" placeholder="Ingrese el monto" autocomplete="off">
+                    </div>
+                    <div class="form-group-register" id="register-oc">
+                        <label for="registerOc">OC</label>
+                        <input type="text" id="registerOc" placeholder="Ingrese el número de OC" autocomplete="off">
+                    </div>
+                    <div class="form-group-register" id="register-oc-date">
+                        <label for="registerOcDate">Fecha OC</label>
+                        <input type="date" id="registerOcDate">
+                    </div>
+                    <div class="form-group-register" id="register-provider">
+                        <label for="registerProvider">Proveedor</label>
+                        <input type="text" id="registerProvider" placeholder="Ingrese el proveedor" autocomplete="off">
+                    </div>
+                    <div class="bttn-container-register" id="register-button-container">
+                        <button type="submit" class="btn-save-register" id="btnSave">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="outer-container" id="tableContainer">
+                <div class="month-filter">
+                    <label for="monthSelector">Mes: </label>
+                    <select id="monthSelector"></select>
+                    <label for="yearSelector">Año: </label>
+                    <select id="yearSelector"></select>
+                    <label for="allFilterToggle" style="margin-left: 20px;">
+                        <input type="checkbox" id="allFilterToggle"> Ver todos los registros
+                    </label>
+                    <button id="btnDownload" class="btn-download">Descargar Excel <i class="fas fa-download"></i></button>
+                    <button id="pendingFilterBtn" style="margin-left: 10px;">Limpiar</button>
+                    <button id="allFilterBtn" style="margin-left: 5px;">Todas</button>
+                    <input type="file" id="importFile" accept=".csv" style="margin-left: 10px;">
+                    <button id="btnImport" style="margin-left: 5px;">Importar <i class="fas fa-upload"></i></button>
+                    <button id="btnDownloadFormat" style="margin-left: 5px;">Descargar Formato <i class="fas fa-file-excel"></i></button>
+                </div>
+                <div class="table-container" id="codigosTable" style="display:block;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(0)"><i class="fas fa-filter"></i></span>Acciones
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(0)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(1)"><i class="fas fa-filter"></i></span>ID
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(1)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(2)"><i class="fas fa-filter"></i></span>Fecha de Ingreso
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(2)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(3)"><i class="fas fa-filter"></i></span>Factura
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(3)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(4)"><i class="fas fa-filter"></i></span>Emisión de Factura
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(4)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(5)"><i class="fas fa-filter"></i></span>Monto de la Factura
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(5)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(6)"><i class="fas fa-filter"></i></span>OC
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(6)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(7)"><i class="fas fa-filter"></i></span>Fecha de OC
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(7)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(8)"><i class="fas fa-filter"></i></span>Proveedor
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(8)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(9)"><i class="fas fa-filter"></i></span>Acta
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(9)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(10)"><i class="fas fa-filter"></i></span>Fecha de Salida
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(10)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(11)"><i class="fas fa-filter"></i></span>Número de Salida
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(11)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(12)"><i class="fas fa-filter"></i></span>Mes de Ingreso
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(12)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(13)"><i class="fas fa-filter"></i></span>Año de Ingreso
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(13)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(14)"><i class="fas fa-filter"></i></span>Mes de Salida
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(14)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(15)"><i class="fas fa-filter"></i></span>Año de Salida
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(15)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(16)"><i class="fas fa-filter"></i></span>Usuario
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(16)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody> 
+                    </table>
+                </div>
+
+                <div id="pagination">
+                    <button id="btnPrevious"><i class="fas fa-chevron-left"></i> Anterior</button>
+                    <span id="pageNumber">Página 1 de </span>
+                    <button id="btnNext">Siguiente <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <script src="resizer.js"></script>
+        
+            <div class="overlay hidden" id="overlayRegister">
+                <div class="spinner-container" id="spinnerContainerRegister">
+                    <div class="lds-dual-ring" id="spinnerRegister"></div>
+                    <div class="loading-text" id="loadingTextRegister">Registrando...</div>
+                </div>
+            </div>
+            
+            <div class="overlay hidden" id="overlayDelete">
+                <div class="spinner-container" id="spinnerContainerDelete">
+                    <div class="lds-dual-ring" id="spinnerDelete"></div>
+                    <div class="loading-text" id="loadingTextDelete">Eliminando...</div>
+                </div>
+            </div>
+            
+            <div class="overlay hidden" id="overlayImport">
+                <div class="spinner-container" id="spinnerContainerImport">
+                    <div class="lds-dual-ring" id="spinnerImport"></div>
+                    <div class="loading-text" id="loadingTextImport">Importando...</div>
+                </div>
+            </div>
+
+            <div class="overlay hidden" id="overlayModify">
+                <div class="spinner-container" id="spinnerContainerModify">
+                    <div class="lds-dual-ring" id="spinnerModify"></div>
+                    <div class="loading-text" id="loadingTextModify">Modificando...</div>
+                </div>
+            </div>
+            
+            <div class="overlay hidden" id="overlayLoading">
+                <div class="spinner-container" id="spinnerContainerLoading">
+                    <div class="lds-dual-ring" id="spinnerLoading"></div>
+                    <div class="loading-text" id="loadingTextLoading">Cargando registros...</div>
+                </div>
+            </div>            
+            
+            <div class="messages-container" id="messagesContainer">
+                <div class="message success hidden" id="messageSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="text" id="successText"></div>
+                    <button class="close-btn" id="closeMessageSuccess">×</button>
+                </div>
+                <div class="message warning hidden" id="messageWarning">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="text" id="warningText">Advertencia:</div>
+                    <button class="close-btn" id="closeMessageWarning">×</button>
+                </div>
+                <div class="message error hidden" id="messageError">
+                    <i class="fas fa-times-circle"></i>
+                    <div class="text" id="errorText">Error: </div>
+                    <button class="close-btn" id="closeMessageError">×</button>
+                </div>
+                <div class="message info hidden" id="messageInfo">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="text" id="infoText">Información: </div>
+                    <button class="close-btn" id="closeMessageInfo">×</button>
+                </div>
+            </div>
+            
+            <div class="confirmation-container-new hidden" id="confirmationDeleteContainerNew">
+                <div class="confirmation-dialog-new">
+                    <button class="close-btn-new" id="closeConfirmationDeleteNew">×</button>
+                    <div class="icon-container">
+                        <i class="fas fa-exclamation-triangle fa-3x warning-icon"></i>
+                    </div>
+                    <h3 class="confirmation-message">¿Desea eliminar el ítem señalado?</h3>
+                    <div class="confirmation-buttons-new">
+                        <button id="btnConfirmDeleteNew" class="btn-confirm-new">Sí</button>
+                        <button id="btnCancelDeleteNew" class="btn-cancel-new">No</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="editModalOverlay" class="edit-modal-overlay hidden"></div>
+            <div id="editModal" class="edit-modal hidden">
+                <button id="closeEditModal" class="close-btn">×</button>
+                <h2 id="editModalTitle"></h2>
+                <div class="form-row-register">
+                    <div class="form-group-register">
+                        <label for="editModalActa">Acta</label>
+                        <input type="text" id="editModalActa" placeholder="Ingrese el número de acta" autocomplete="off" pattern="[0-9]*" inputmode="numeric">
+                    </div>
+                    <div class="form-group-register">
+                        <label for="editModalExitDate">Fecha de Salida</label>
+                        <input type="date" id="editModalExitDate" onclick="this.showPicker()">
+                    </div>
+                    <div class="form-group-register">
+                        <label for="editModalExitNumber">Número de Salida</label>
+                        <input type="text" id="editModalExitNumber" placeholder="Ingrese el número de salida" autocomplete="off" pattern="[0-9]*" inputmode="numeric">
+                    </div>
+                    <div class="edit-modal-actions">
+                        <button id="saveChangesButton">Agregar Datos</button>
+                        <button id="cancelEditButton">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="confirmationTransferContainer" class="TransferContainer hidden">
+                <div class="confirmation-dialog">
+                    <p id="transferConfirmationText"></p>
+                    <button id="btnCancelTransfer">
+                        <i class="fas fa-ban"></i> Cancelar
+                    </button>
+                    <button id="btnConfirmTransfer">
+                        <i class="fas fa-check"></i> Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+        <script type="module" src="lab.js"></script>
+    </body>
+</html>

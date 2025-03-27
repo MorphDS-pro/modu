@@ -1,0 +1,105 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: #333;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 30px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+    background: linear-gradient(135deg, #3a4c65, #1e2a3b);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    width: 100%;
+}
+
+.card .header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Logo */
+.card .header .logo {
+    width: 500px; /* Aumenta el tamaño del logo, puedes ajustar este valor según lo que necesites */
+    height: auto; /* Mantiene la proporción del logo */
+    margin-right: 15px; /* Espacio entre el logo y el nombre */
+}
+
+
+/* Icono del usuario */
+.card i {
+    font-size: 60px;
+    color: #56c1e1;
+    margin-right: 15px;
+}
+
+/* Nombre de usuario */
+.card h3 {
+    font-size: 24px;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Estilos para los datos */
+.data-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 16px;
+    margin-bottom: 12px;
+    padding: 5px 0;
+}
+
+.data-item .label {
+    font-weight: 500;
+    color: #fff;
+    width: 40%;
+    text-align: left;
+    margin-right: 5px;
+}
+
+.data-item .data {
+    font-weight: 400;
+    color: #d1d1d1;
+    width: 55%;
+    text-align: left;
+}
+
+.card .data-item:last-child {
+    margin-bottom: 0;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: #d1d1d1;
+}
+
+.footer a {
+    color: #56c1e1;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}

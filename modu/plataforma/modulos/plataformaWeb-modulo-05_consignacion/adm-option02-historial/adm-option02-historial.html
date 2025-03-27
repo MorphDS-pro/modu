@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="icons/1197396.png" type="image/x-icon">
+        <title>Historial</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <link rel="stylesheet" href="css/styles-adm-option01-ingresos.css">
+    </head>
+    <body>
+        <div class="container" id="main-container">
+            <h1 id="main-title"> HISTORIAL CONSIGNACION <i class="fas fa-check-circle fa-lg"></i></h1>
+            <div id="user-name-container" class="user-name" style="display: none;">
+                <span id="user-name-span">Cargando usuario...</span>
+            </div>
+
+            <script type="module" src=""></script>
+
+            <div class="division" id="division-line"></div>   
+
+            <div class="form-container" id="formContainer">
+                <div class="form-search-container" id="searchContainer">
+                    <h2 id="search-title">Buscar registros</h2>
+                    <div class="form-row-search" id="search-row">
+                        <div class="form-group-search" id="search-surgery-date">
+                            <label for="searchSurgeryDateFrom">Fecha de Cx (Desde)</label>
+                            <input type="date" id="searchSurgeryDateFrom" class="date-input">
+                        </div>
+                        <div class="form-group-search" id="search-surgery-date">
+                            <label for="searchSurgeryDateTo">Fecha de Cx (Hasta)</label>
+                            <input type="date" id="searchSurgeryDateTo" class="date-input">
+                        </div>
+                        <div class="form-group-search" id="search-surgery-date">
+                            <label for="searchSurgeryDate">Fecha de Cx</label>
+                            <input type="date" id="searchSurgeryDate" class="date-input">
+                        </div>                      
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="outer-container" id="tableContainer">
+                <div class="month-filter">
+                    <button id="btnDownload" class="btn-download">Descargar Excel <i class="fas fa-download"></i></button>
+                    <button id="btnSync" class="btn-sync">Sincronizar con Planilla <i class="fas fa-sync-alt"></i></button>
+                </div>
+                <div class="table-container" id="codigosTable" style="display:block;">
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(0)"><i class="fas fa-filter"></i></span>Acción
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(0)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(1)"><i class="fas fa-filter"></i></span>ID
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(1)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(2)"><i class="fas fa-filter"></i></span>Admisión
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(2)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(3)"><i class="fas fa-filter"></i></span>Paciente
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(3)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(4)"><i class="fas fa-filter"></i></span>Médico
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(4)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(5)"><i class="fas fa-filter"></i></span>Fecha Cx
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(5)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(6)"><i class="fas fa-filter"></i></span>Proveedor
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(6)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(7)"><i class="fas fa-filter"></i></span>Código
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(7)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(8)"><i class="fas fa-filter"></i></span>Descripción
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(8)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(9)"><i class="fas fa-filter"></i></span>Cantidad
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(9)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(10)"><i class="fas fa-filter"></i></span>Precio
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(10)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(11)"><i class="fas fa-filter"></i></span>Atributo
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(11)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(12)"><i class="fas fa-filter"></i></span>Estado
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(12)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(13)"><i class="fas fa-filter"></i></span>Tipo
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(13)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(14)"><i class="fas fa-filter"></i></span>Orden de compra
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(14)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(15)"><i class="fas fa-filter"></i></span>Factura
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(15)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(16)"><i class="fas fa-filter"></i></span>Guía
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(16)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(17)"><i class="fas fa-filter"></i></span>Documento
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(17)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(18)"><i class="fas fa-filter"></i></span>Despacho
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(18)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(19)"><i class="fas fa-filter"></i></span>Cadena
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(19)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(20)"><i class="fas fa-filter"></i></span>Fecha de creación
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(20)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(21)"><i class="fas fa-filter"></i></span>Usuario digitado
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(21)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody> 
+                    </table>                        
+                </div>
+
+                <div id="pagination">
+                    <button id="btnPrevious"><i class="fas fa-chevron-left"></i> Anterior</button>
+                    <span id="pageNumber">Página 1 de </span>
+                    <button id="btnNext">Siguiente <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <script src="js/script07-resizer.js"></script>
+            
+            <div class="overlay hidden" id="overlayDelete">
+                <div class="spinner-container" id="spinnerContainerDelete">
+                    <div class="lds-dual-ring" id="spinnerDelete"></div>
+                    <div class="loading-text" id="loadingTextDelete">Eliminando...</div>
+                </div>
+            </div>           
+
+            <div class="overlay hidden" id="overlayModify">
+                <div class="spinner-container" id="spinnerContainerModify">
+                    <div class="lds-dual-ring" id="spinnerModify"></div>
+                    <div class="loading-text" id="loadingTextModify">Modificando...</div>
+                </div>
+            </div>
+            
+            <div class="overlay hidden" id="overlayLoading">
+                <div class="spinner-container" id="spinnerContainerLoading">
+                    <div class="lds-dual-ring" id="spinnerLoading"></div>
+                    <div class="loading-text" id="loadingTextLoading">Cargando registros...</div>
+                </div>
+            </div>            
+            
+            <div class="messages-container" id="messagesContainer">
+                <div class="message success hidden" id="messageSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="text" id="successText"></div>
+                    <button class="close-btn" id="closeMessageSuccess">&times;</button>
+                </div>
+                <div class="message warning hidden" id="messageWarning">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="text" id="warningText">Advertencia:</div>
+                    <button class="close-btn" id="closeMessageWarning">&times;</button>
+                </div>
+                <div class="message error hidden" id="messageError">
+                    <i class="fas fa-times-circle"></i>
+                    <div class="text" id="errorText">Error: </div>
+                    <button class="close-btn" id="closeMessageError">&times;</button>
+                </div>
+                <div class="message info hidden" id="messageInfo">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="text" id="infoText">Información: </div>
+                    <button class="close-btn" id="closeMessageInfo">&times;</button>
+                </div>
+            </div>
+            
+            <div class="confirmation-container-new hidden" id="confirmationDeleteContainerNew">
+                <div class="confirmation-dialog-new">
+                    <button class="close-btn-new" id="closeConfirmationDeleteNew">&times;</button>
+                    <div class="icon-container">
+                        <i class="fas fa-exclamation-triangle fa-3x warning-icon"></i>
+                    </div>
+                    <h3 class="confirmation-message">¿Desea eliminar el ítem señalado?</h3>
+                    <div class="confirmation-buttons-new">
+                        <button id="btnConfirmDeleteNew" class="btn-confirm-new">Sí</button>
+                        <button id="btnCancelDeleteNew" class="btn-cancel-new">No</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="editModalOverlay" class="edit-modal-overlay"></div>
+            <div id="editModal" class="edit-modal">
+                <button id="closeEditModal" class="close-btn">&times;</button>
+                <h2 id="editModalTitle"></h2>
+                <p id="editModalAdmission">
+                    <span id="editModalAdmissionValue">Sin admisión</span>
+                </p>
+                <p id="editModalPaciente">
+                    <span id="editModalPacienteValue">Sin paciente</span>
+                </p>          
+                <div class="edit-modal-content">
+                    <p>Proveedor: <span id="editModalProviderName">Proveedor desconocido</span></p>
+                </div>        
+                <hr class="edit-modal-divider">
+                <div class="edit-modal-content">                                 
+                    <label for="editModalAdmisionInput">Admisión:</label>
+                    <input type="text" id="editModalAdmisionInput">
+                </div>
+                <div class="edit-modal-content">
+                    <label for="editModalPacienteInput">Paciente:</label>
+                    <input type="text" id="editModalPacienteInput">
+                </div>
+                <div class="edit-modal-content">
+                    <label for="editModalCantInput">Cantidad:</label>
+                    <input type="text" id="editModalCantInput">
+                </div>
+                <div class="edit-modal-actions">
+                    <button id="saveChangesButton">Guardar Cambios</button>
+                </div>
+            </div>
+
+            <div id="modalOverlayDocumento" class="modal-overlay"></div>
+            <div class="edit-modal-content" id="editModalDocumentoInputDiv">
+            <label for="editModalDocumentoInput" class="input-label">Documento:</label>
+            <input type="text" id="editModalDocumentoInput" class="input-field">
+            <button id="btnAgregarDocumento" class="agregar-button">
+                Agregar
+            </button>
+            </div>
+
+        </div>
+        
+        <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+        <script type="module" src="js/script-adm-historial.js"></script>
+        <script type="module">
+            import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js';
+            import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js';
+        
+            const firebaseConfig = {
+                apiKey: "AIzaSyDsSD0EcY_QKPcqycpiynXg--mO9VMvRDs",
+                authDomain: "usuarios-d4364.firebaseapp.com",
+                projectId: "usuarios-d4364",
+                storageBucket: "usuarios-d4364.firebasestorage.app",
+                messagingSenderId: "1050588492432",
+                appId: "1:1050588492432:web:5803cad6718dfa36a09e15",
+                measurementId: "G-SZD8728PHP"
+            };
+        
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+        
+            onAuthStateChanged(auth, (user) => {
+                const mainContainer = document.getElementById('main-container'); // Cambiado de 'content' a 'main-container'
+                const userId = sessionStorage.getItem('userId');
+                const roles = JSON.parse(sessionStorage.getItem('roles') || '[]');
+        
+                if (user && userId && roles.length > 0) {
+                    mainContainer.classList.remove('hidden'); // Usar el elemento correcto
+                } else {
+                    window.location.href = '../../../../login.html'; 
+                }
+            });
+        </script>
+    
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
+    </body>
+</html>

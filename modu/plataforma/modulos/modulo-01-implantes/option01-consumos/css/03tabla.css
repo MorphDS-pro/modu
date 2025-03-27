@@ -1,0 +1,500 @@
+
+.outer-container {
+    margin-top: 5px;
+    width: 100%;
+    max-width: 1700px;
+    overflow-x: auto;
+}
+
+.month-filter {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.month-filter label {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.month-filter select {
+    padding: 5px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+    border-color: #ddd;
+}
+
+#pendingFilterBtn {
+    padding: 6px 10px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#pendingFilterBtn:hover {
+    background-color: #c0392b;
+}
+
+#allFilterBtn {
+    padding: 6px 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#allFilterBtn:hover {
+    background-color: #2980b9;
+}
+
+.status-select, .check-select {
+    width: 100%;
+    padding: 2px;
+    font-size: 12px;
+    border: none;
+    background-color: transparent;
+    color: #555;
+    cursor: pointer;
+}
+
+.status-select:focus, .check-select:focus {
+    outline: none;
+    border: 1px solid #3498db;
+}
+
+td select {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.btn-download {
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-download i {
+    color: white;
+}
+
+.btn-download:hover {
+    background-color: #45a049;
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+
+.btn-download:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+#btnDownloadFormat {
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#btnDownloadFormat i {
+    color: white;
+}
+
+#btnDownloadFormat:hover {
+    background-color: #45a049;
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+
+#btnDownloadFormat:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+#btnImportExcel {
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#btnImportExcel i {
+    color: white;
+}
+
+#btnImportExcel:hover {
+    background-color: #45a049;
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+
+#btnImportExcel:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.table-container {
+    width: 100%;
+    height: 540px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: none;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f4;
+    z-index: 10;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    text-align: start;
+    width: 100px;
+    min-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px;
+}
+
+th {
+    font-size: 12px;
+    color: #202020;
+    position: relative;
+}
+
+td {
+    font-size: 12px;
+    color: #555;
+}
+
+tr {
+    height: 6px;
+}
+
+.resizer {
+    position: absolute;
+    top: 0;
+    right: -2px;
+    width: 5px;
+    height: 100%;
+    cursor: ew-resize;
+    background: transparent;
+}
+
+.resizer:hover {
+    background: #666;
+}
+
+tr:hover td {
+    background-color: #f0f0f0;
+}
+
+th:nth-child(12),
+td:nth-child(12) {
+    border-left: 2px solid #333;
+}
+
+th:nth-child(17),
+td:nth-child(17) {
+    border-right: 2px solid #333;
+}
+
+th:nth-child(n+13):nth-child(-n+16),
+td:nth-child(n+13):nth-child(-n+16) {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.input-label {
+    font-size: 11px;
+    color: #333;
+    font-weight: bold;
+}
+
+.input-field {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 10px;
+    height: 26px;
+    width: 120px;
+}
+
+.filter-icon {
+    cursor: pointer;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.filter-icon i {
+    color: #bbbbbb;
+}
+
+.filter-icon i:hover {
+    color: #777777;
+}
+
+.filter-input {
+    width: 100%;
+    padding: 4px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 11px;
+    box-sizing: border-box;
+    display: block;
+}
+
+.filter-input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 10px #3498db;
+    outline: none;
+}
+
+td.status-ingresado {
+    color: #808080;
+}
+
+td.status-cargado {
+    color: #008000;
+    font-weight: bold;
+}
+
+td.status-modificar-precio {
+    color: #FFA500;
+}
+
+td.status-crear-código {
+    color: #DC143C;
+}
+
+td.status-solicitado {
+    color: #FFD700;
+}
+
+td.status-pendiente-cargado {
+    color: #FF0000;
+}
+
+td.status-cerrada-regular {
+    color: #0000FF;
+}
+
+.status-select {
+    width: 100%;
+    padding: 2px;
+    font-size: 12px;
+    border: none;
+    background-color: transparent;
+    color: inherit;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.status-select:focus {
+    outline: none;
+    border: 1px solid #3498db;
+}
+
+.status-select option[value="ingresado"] { color: #808080; }
+.status-select option[value="cargado"] { color: #008000; }
+.status-select option[value="modificar precio"] { color: #FFA500; }
+.status-select option[value="crear código"] { color: #DC143C; }
+.status-select option[value="solicitado"] { color: #FFD700; }
+.status-select option[value="pendiente cargado"] { color: #FF0000; }
+.status-select option[value="cerrada regular"] { color: #0000FF; }
+
+td[class^="status-"] .status-select {
+    color: inherit;
+}
+
+td[class^="status-"] {
+    padding: 0;
+}
+
+td select {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+@media (max-width: 1200px) {
+    .outer-container {
+        max-width: 100%;
+    }
+    .month-filter {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .month-filter label {
+        font-size: 11px;
+    }
+    .month-filter select {
+        padding: 4px;
+        font-size: 11px;
+    }
+    #pendingFilterBtn, #allFilterBtn, .btn-download, #btnDownloadFormat, #btnImportExcel {
+        padding: 5px 8px;
+        font-size: 11px;
+    }
+    .table-container {
+        height: 450px;
+    }
+    th, td {
+        font-size: 11px;
+        min-width: 80px;
+        padding: 4px;
+    }
+    .input-field {
+        width: 100px;
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 768px) {
+    .outer-container {
+        margin-top: 3px;
+    }
+    .month-filter {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    .month-filter label {
+        font-size: 10px;
+    }
+    .month-filter select {
+        padding: 3px;
+        font-size: 10px;
+        width: 100%;
+    }
+    #pendingFilterBtn, #allFilterBtn, .btn-download, #btnDownloadFormat, #btnImportExcel {
+        padding: 4px 6px;
+        font-size: 10px;
+        width: 100%;
+    }
+    .table-container {
+        height: 350px;
+    }
+    table {
+        min-width: 600px;
+    }
+    th, td {
+        font-size: 10px;
+        min-width: 60px;
+        padding: 3px;
+    }
+    .resizer {
+        display: none;
+    }
+    .input-field {
+        width: 80px;
+        height: 22px;
+        font-size: 8px;
+    }
+    .filter-input {
+        font-size: 10px;
+        padding: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+    .outer-container {
+        margin-top: 2px;
+    }
+    .month-filter {
+        gap: 5px;
+    }
+    .month-filter label {
+        font-size: 9px;
+    }
+    .month-filter select {
+        padding: 2px;
+        font-size: 9px;
+    }
+    #pendingFilterBtn, #allFilterBtn, .btn-download, #btnDownloadFormat, #btnImportExcel {
+        padding: 3px 5px;
+        font-size: 9px;
+    }
+    .table-container {
+        height: 250px;
+    }
+    table {
+        min-width: 400px;
+    }
+    th, td {
+        font-size: 8px;
+        min-width: 50px;
+        padding: 2px;
+    }
+    .status-select, .check-select {
+        font-size: 8px;
+        padding: 1px;
+    }
+    .input-field {
+        width: 60px;
+        height: 20px;
+        font-size: 7px;
+    }
+    .filter-input {
+        font-size: 9px;
+        padding: 2px;
+    }
+}

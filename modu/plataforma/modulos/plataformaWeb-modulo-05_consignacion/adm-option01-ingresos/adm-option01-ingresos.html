@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="icons/1197396.png" type="image/x-icon">
+        <title>Ingresos</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <link rel="stylesheet" href="css/styles-adm-option01-ingresos.css">
+    </head>
+    <body>
+        <div class="container" id="main-container">
+            <h1 id="main-title"> INGRESOS DE CONSIGNACIÓN <i class="fas fa-check-circle fa-lg"></i></h1>
+            <div id="user-name-container" class="user-name" style="display: none;">
+                <span id="user-name-span">Cargando usuario...</span>
+            </div>
+
+            <script type="module" src="js/script06-userName.js"></script>
+
+            <div class="division" id="division-line"></div>   
+
+            <div class="form-container" id="formContainer"> 
+
+                <div class="form-new-container" id="formNewContainer"> 
+                    <button id="bttnRegister" class="bttn-register">Registrar un código<i class="fas fa-arrow-down"></i></button>
+                    <button id="bttnSearch" class="bttn-search">Buscador<i class="fas fa-arrow-down"></i></button>
+                </div>
+
+                <div class="form-search-container hidden" id="searchContainer">
+                    <h2 id="search-title">Buscar código</h2>
+                    <div class="form-row-search" id="search-row">
+                        <div class="form-group-search" id="search-company">
+                            <label for="searchCompany">Buscar por empresa</label>
+                            <input type="text" id="searchCompany" placeholder="Ingrese el nombre de la empersa">
+                        </div>     
+                        <div class="form-group-search" id="search-reference">
+                            <label for="searchReference">Referencia</label>
+                            <input type="text" id="searchReference" placeholder="Ingrese la referencia">
+                        </div>  
+                        <div class="form-group-search" id="search-details">
+                            <label for="searchDetails">Detalles</label>
+                            <input type="text" id="searchDetails" placeholder="Ingrese los detalles">
+                        </div>    
+                        <div class="form-group-search" id="search-code">
+                            <label for="searchCode">Código</label>
+                            <input type="text" id="searchCode" placeholder="Ingrese el código">
+                        </div>       
+                    </div>
+                </div>
+
+                <form class="form-register-container hidden" id="formRegisterContainer">
+                    <h2 id="register-title">Formulario de Registro</h2>
+                    
+                    <div class="form-row-register">
+                        <div class="form-group-register" id="register-usuario">
+                            <label for="registerUsuario" style="font-size: 12px;">Digitado por:</label>
+                            <span id="registerUsuario" style="font-size: 10px;"></span>
+                        </div>
+                
+                        <div class="form-group-register" id="register-admission">
+                            <label for="registerAdmission">Admisión</label>
+                            <input type="text" id="registerAdmission" placeholder="Ingrese la admisión" required autocomplete="off">
+                        </div>
+                
+                        <div class="form-group-register" id="register-patient">
+                            <label for="registerPatient">Nombre del Paciente</label>
+                            <input type="text" id="registerPatient" placeholder="Ingrese el nombre del paciente" required autocomplete="off">
+                        </div>
+                
+                        <div class="form-group-register" id="register-doctor">
+                            <label for="registerDoctorInput">Elige un médico:</label>
+                            <div class="input-with-arrow">
+                                <input type="text" id="registerDoctorInput" placeholder="Escribe para buscar médico..." required autocomplete="off">
+                                <button type="button" id="showDoctorsButton" class="show-descriptions-button">
+                                    ▾
+                                </button>
+                            </div>
+                            <ul id="customDoctorsList" class="custom-datalist" style="display: none;"></ul>
+                        </div>
+                
+                        <div class="form-group-register" id="register-surgery-date">
+                            <label for="registerSurgeryDate">Fecha de Cirugía</label>
+                            <input type="date" id="registerSurgeryDate" required autocomplete="off">
+                        </div>   
+                        
+                                        
+                        <div class="form-group-register" id="register-description">
+                            <label for="registerDescriptionInput">Elige una descripción:</label>
+                            <div class="input-with-arrow">
+                                <input type="text" id="registerDescriptionInput" placeholder="Escribe para buscar..." required autocomplete="off">
+                                <button type="button" id="showDescriptionsButton" class="show-descriptions-button">
+                                    ▾
+                                </button>
+                                <button type="button" id="toggleGroupingButton" class="toggle-grouping-button">
+                                    Consignación <!-- Texto inicial -->
+                                </button>
+                            </div>
+                            <ul id="customDescriptionsList" class="custom-datalist" style="display: none;"></ul>
+                        </div>
+                        
+
+                        <div class="form-group-register" id="register-quantity">
+                            <label for="registerQuantity">Cantidad</label>
+                            <input type="number" id="registerQuantity" placeholder="Ingrese la cantidad" required autocomplete="off">
+                        </div>
+            
+                    </div>
+                
+                    <div class="form-row-register">
+
+                        <div class="form-group-register" id="register-company">
+                            <label for="registerCompany">Nombre de la empresa</label>
+                            <input type="text" id="registerCompany" placeholder="Ingrese el nombre de la empresa" readonly>
+                        </div>
+
+                        <div class="form-group-register" id="register-code">
+                            <label for="registerCode">Código</label>
+                            <input type="text" id="registerCode" placeholder="Ingrese el código" readonly>
+                        </div>
+
+                        <div class="form-group-register" id="register-price">
+                            <label for="registerPrice">Precio</label>
+                            <input type="text" id="registerPrice" placeholder="Ingrese el precio" readonly>
+                        </div>
+                
+                        <div class="form-group-register" id="register-attribute">
+                            <label for="registerAttribute">Atributo</label>
+                            <input type="text" id="registerAttribute" value="Consignación" readonly>
+                        </div>
+                
+                        <div class="form-group-register" id="register-status">
+                            <label for="registerStatus">Estado</label>
+                            <select id="registerStatus">
+                                <option value="ingresado">Ingresado</option>
+                            </select>
+                        </div>
+                
+                        <div class="form-group-register" id="register-type">
+                            <label for="registerType">Tipo</label>
+                            <select id="registerType">
+                                <option value="reposicion">Reposición</option>
+                                <option value="regular">Regular</option>
+                            </select>
+                        </div>
+
+                        <div class="bttn-container-register" id="register-button-container">
+                            <button type="submit" class="btn-save-register" id="btnSave">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                            <button type="reset" class="btn-reset-register" id="btnReset">
+                                <i class="fas fa-rotate-left"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <script>
+                const inputUsuario = document.getElementById('registerUsuario');
+                inputUsuario.setAttribute('readonly', true);
+            </script>
+
+            <div class="outer-container" id="tableContainer">
+                <div class="table-container" id="codigosTable" style="display:block;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><span class="resizer"></span>Acción</th>
+                                <th><span class="resizer"></span>Admisión</th>
+                                <th><span class="resizer"></span>Paciente</th>
+                                <th><span class="resizer"></span>Médico</th>
+                                <th><span class="resizer"></span>Fecha Cx</th>
+                                <th><span class="resizer"></span>Proveedor</th>
+                                <th><span class="resizer"></span>Código</th>
+                                <th><span class="resizer"></span>Descripción</th>
+                                <th><span class="resizer"></span>Cantidad</th>
+                                <th><span class="resizer"></span>Precio</th>
+                                <th><span class="resizer"></span>Atributo</th>
+                                <th><span class="resizer"></span>Estado</th>
+                                <th><span class="resizer"></span>Tipo</th>
+                                <th><span class="resizer"></span>Fecha de creación</th>
+                                <th><span class="resizer"></span>Usuario digitado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody> 
+                    </table>
+                
+                    <div class="save-container">
+                        <button id="saveButton">
+                            <i class="fas fa-exchange-alt"></i> Traspaso
+                        </button>
+                    </div>               
+                </div>
+
+                <div id="pagination">
+                    <button id="btnPrevious"><i class="fas fa-chevron-left"></i> Anterior</button>
+                    <span id="pageNumber">Página 1 de </span>
+                    <button id="btnNext">Siguiente <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <script src="js/script07-resizer.js"></script>
+
+            <div class="file-actions" id="fileActions">
+                <button id="btnDownload" class="btn-download">Descargar Excel <i class="fas fa-download"></i></button>
+            </div>
+        
+            <div class="overlay hidden" id="overlayRegister">
+                <div class="spinner-container" id="spinnerContainerRegister">
+                    <div class="lds-dual-ring" id="spinnerRegister"></div>
+                    <div class="loading-text" id="loadingTextRegister">Registrando...</div>
+                </div>
+            </div>
+            
+            <div class="overlay hidden" id="overlayDelete">
+                <div class="spinner-container" id="spinnerContainerDelete">
+                    <div class="lds-dual-ring" id="spinnerDelete"></div>
+                    <div class="loading-text" id="loadingTextDelete">Eliminando...</div>
+                </div>
+            </div>
+            
+            <div class="overlay hidden" id="overlayImport">
+                <div class="spinner-container" id="spinnerContainerImport">
+                    <div class="lds-dual-ring" id="spinnerImport"></div>
+                    <div class="loading-text" id="loadingTextImport">Traspasando...</div>
+                </div>
+            </div>
+
+            <div class="overlay hidden" id="overlayModify">
+                <div class="spinner-container" id="spinnerContainerModify">
+                    <div class="lds-dual-ring" id="spinnerModify"></div>
+                    <div class="loading-text" id="loadingTextModify">Modificando...</div>
+                </div>
+            </div>
+            
+            <div class="overlay hidden" id="overlayLoading">
+                <div class="spinner-container" id="spinnerContainerLoading">
+                    <div class="lds-dual-ring" id="spinnerLoading"></div>
+                    <div class="loading-text" id="loadingTextLoading">Cargando registros...</div>
+                </div>
+            </div>            
+            
+            <div class="messages-container" id="messagesContainer">
+                <div class="message success hidden" id="messageSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="text" id="successText"></div>
+                    <button class="close-btn" id="closeMessageSuccess">&times;</button>
+                </div>
+                <div class="message warning hidden" id="messageWarning">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="text" id="warningText">Advertencia:</div>
+                    <button class="close-btn" id="closeMessageWarning">&times;</button>
+                </div>
+                <div class="message error hidden" id="messageError">
+                    <i class="fas fa-times-circle"></i>
+                    <div class="text" id="errorText">Error: </div>
+                    <button class="close-btn" id="closeMessageError">&times;</button>
+                </div>
+                <div class="message info hidden" id="messageInfo">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="text" id="infoText">Información: </div>
+                    <button class="close-btn" id="closeMessageInfo">&times;</button>
+                </div>
+            </div>
+            
+            <div class="confirmation-container-new hidden" id="confirmationDeleteContainerNew">
+                <div class="confirmation-dialog-new">
+                    <button class="close-btn-new" id="closeConfirmationDeleteNew">&times;</button>
+                    <div class="icon-container">
+                        <i class="fas fa-exclamation-triangle fa-3x warning-icon"></i>
+                    </div>
+                    <h3 class="confirmation-message">¿Desea eliminar el ítem señalado?</h3>
+                    <div class="confirmation-buttons-new">
+                        <button id="btnConfirmDeleteNew" class="btn-confirm-new">Sí</button>
+                        <button id="btnCancelDeleteNew" class="btn-cancel-new">No</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="editModalOverlay" class="edit-modal-overlay"></div>
+            <div id="editModal" class="edit-modal">
+                <button id="closeEditModal" class="close-btn">&times;</button>
+                <h2 id="editModalTitle"></h2>
+                <p id="editModalAdmission">
+                    <span id="editModalAdmissionValue">Sin admisión</span>
+                </p>
+                <p id="editModalPaciente">
+                    <span id="editModalPacienteValue">Sin paciente</span>
+                </p>          
+                <div class="edit-modal-content">
+                    <p>Proveedor: <span id="editModalProviderName">Proveedor desconocido</span></p>
+                </div>        
+                <hr class="edit-modal-divider">
+                <div class="edit-modal-content">                                 
+                    <label for="editModalAdmisionInput">Admisión:</label>
+                    <input type="text" id="editModalAdmisionInput">
+                </div>
+                <div class="edit-modal-content">
+                    <label for="editModalPacienteInput">Paciente:</label>
+                    <input type="text" id="editModalPacienteInput">
+                </div>
+                <div class="edit-modal-content">
+                    <label for="editModalCantInput">Cantidad:</label>
+                    <input type="text" id="editModalCantInput">
+                </div>
+                <div class="edit-modal-actions">
+                    <button id="saveChangesButton">Guardar Cambios</button>
+                </div>
+            </div>
+
+            <div id="confirmationTransferContainer" class="TransferContainer hidden">
+                <div class="confirmation-dialog">
+                    <p id="transferConfirmationText"></p>
+                    <button id="btnCancelTransfer">
+                        <i class="fas fa-ban"></i> Cancelar
+                    </button>
+                    <button id="btnConfirmTransfer">
+                        <i class="fas fa-check"></i> Confirmar
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+        <script type="module" src="js/script-adm-ingresos.js"></script>
+        <script type="module" src="js/script02-modales.js"></script>
+    </body>
+</html>

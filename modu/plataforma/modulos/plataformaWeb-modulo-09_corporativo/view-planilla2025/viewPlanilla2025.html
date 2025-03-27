@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>View Planilla 2025</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <link rel="stylesheet" href="viewPlanilla2025.css">
+    </head>
+    <body>
+        <div class="container" id="main-container">
+            <h1 id="main-title"> PLANILLA DE IMPLANTES 2025<i class="fas fa-check-circle fa-lg"></i></h1>
+
+            <div class="division" id="division-line"></div>   
+
+            <div class="outer-container" id="tableContainer">
+                <div class="table-container" id="codigosTable" style="display:block;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><span class="resizer"></span>no tocar fila A</th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(0)"><i class="fas fa-filter"></i></span>ID_PACIENTE
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(0)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(1)"><i class="fas fa-filter"></i></span>PACIENTE
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(1)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(2)"><i class="fas fa-filter"></i></span>MEDICO
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(2)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(3)"><i class="fas fa-filter"></i></span>FECHA_CIRUGIA
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(3)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(4)"><i class="fas fa-filter"></i></span>PROVEEDOR
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(4)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(5)"><i class="fas fa-filter"></i></span>CODIGO_CLINICA
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(5)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(6)"><i class="fas fa-filter"></i></span>CODIGO_PROVEEDOR
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(6)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(7)"><i class="fas fa-filter"></i></span>CANTIDAD
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(7)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(8)"><i class="fas fa-filter"></i></span>PRECIO_UNITARIO
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(8)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(9)"><i class="fas fa-filter"></i></span>ATRIBUTO
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(9)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(10)"><i class="fas fa-filter"></i></span>OC
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(10)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(11)"><i class="fas fa-filter"></i></span>OC_MONTO
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(11)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(12)"><i class="fas fa-filter"></i></span>ESTADO
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(12)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(13)"><i class="fas fa-filter"></i></span>FECHA_RECEPCION
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(13)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(14)"><i class="fas fa-filter"></i></span>FECHA_CARGO
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(14)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(15)"><i class="fas fa-filter"></i></span>NUMERO_GUIA
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(15)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(16)"><i class="fas fa-filter"></i></span>NUMERO_FACTURA
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(16)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(17)"><i class="fas fa-filter"></i></span>FECHA_EMISION
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(17)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(18)"><i class="fas fa-filter"></i></span>FECHA_INGRESO
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(18)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(19)"><i class="fas fa-filter"></i></span>LOTE
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(19)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(20)"><i class="fas fa-filter"></i></span>FECHA_VENCIMIENTO
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(20)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(21)"><i class="fas fa-filter"></i></span>CADENA
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(21)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="pagination">
+                    <button id="btnPrevious"><i class="fas fa-chevron-left"></i> Anterior</button>
+                    <span id="pageNumber">Página 1 de </span>
+                    <button id="btnNext">Siguiente <i class="fas fa-chevron-right"></i></button>
+                    <span id="recordCount"></span>
+                </div>
+            </div>
+
+            <script src="resizer.js"></script>
+
+            <div class="overlay-loading hidden" id="overlayLoading">
+                <div class="modal-loading">
+                    <div class="lds-dual-ring-progress">
+                        <div class="progress-ring" id="progressRingLoading"></div>
+                    </div>
+                    <div class="progress">
+                        <span>Cargando registros... <span id="progressPercentageLoading">0%</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script type="module" src="viewPlanilla2025.js"></script>   
+    </body>
+</html>

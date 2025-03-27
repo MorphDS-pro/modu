@@ -1,0 +1,286 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    color: #333;
+    text-shadow: #fff 0px 1px 0px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+
+
+.containerPass {
+    max-width: 600px;
+    padding: 20px;
+    background: #F2F2F2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 10px;
+}
+
+h1 {
+    color: #3498db;
+    text-shadow: none;
+}
+
+.container {
+    width: 100%;
+    text-align: center;
+}
+
+.box {
+    background: linear-gradient(to bottom, #E9E9E9, #D7D7D7);
+    box-shadow: inset 0px 2px 2px #B2B3B5;
+    border-radius: 18px;
+    border: solid 3px #FFFFFF;
+    padding: 15px;
+}
+
+label {
+    font-size: 18px;
+    display: block;
+    margin-top: 10px;
+}
+
+input {
+    font-size: 18px;
+    width: 90%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 10px #3498db;
+    outline: none;
+}
+
+.btn.btn-primary {
+    background-color: #3498db;
+    color: #E0E0E0;
+    border: solid 3px #3498db;
+    padding: 12px 24px;
+    border-radius: 16px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn.btn-primary:hover {
+    background-color: #217dbb;
+}
+
+#mensajeModal {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-dialog {
+    max-width: 400px;
+    background: white;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px;
+}
+
+.modal-title,
+.modal-body {
+    color: #007bff;
+    font-size: 18px;
+}
+
+.btn-secondary {
+    background: none;
+    color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn-secondary:hover {
+    background: #007bff;
+    color: white;
+}
+
+.password-requirements {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px; 
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .hidden {
+    display: none;
+  }
+  
+  .spinner-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-out;
+    text-align: center;
+    width: 450px;
+    height: 100px;
+  }
+  
+  .lds-dual-ring,
+  .lds-dual-ring:after {
+    box-sizing: border-box;
+    color: #007BFF;
+  }
+  
+  .lds-dual-ring {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+  }
+  
+  .lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 4.2px solid currentColor;
+    border-color: currentColor transparent currentColor transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+    color: #007BFF;
+  }
+  
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .loading-text {
+    font-size: 18px;
+    color: #333;
+    display: inline-block;
+    animation: fadeInText 1.5s ease-out;
+    margin-left: 10px;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInText {
+    0% {
+      opacity: 0;
+      transform: translateY(25px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .spinner-container {
+      width: 80%;
+      height: auto;
+      padding: 12px;
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .lds-dual-ring {
+      width: 50px;
+      height: 50px;
+    }
+  
+    .loading-text {
+      font-size: 16px;
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .spinner-container {
+      width: 90%;
+      height: auto;
+      padding: 10px;
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .lds-dual-ring {
+      width: 40px;
+      height: 40px;
+    }
+  
+    .loading-text {
+      font-size: 14px;
+      margin-left: 0;
+      margin-top: 8px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .spinner-container {
+      width: 95%;
+      padding: 8px;
+    }
+  
+    .lds-dual-ring {
+      width: 35px;
+      height: 35px;
+    }
+  
+    .loading-text {
+      font-size: 12px;
+      margin-left: 0;
+      margin-top: 6px;
+    }
+  }
+  

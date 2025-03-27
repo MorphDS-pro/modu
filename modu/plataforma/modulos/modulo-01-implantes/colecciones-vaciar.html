@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vaciar Colecciones</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #f4f4f4;
+            }
+            .container {
+                text-align: center;
+                background: white;
+                padding: 40px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                margin-bottom: 30px;
+                color: #333;
+            }
+            .buttons-container {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+            button {
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                border: none;
+                border-radius: 5px;
+                background-color: #e74c3c;
+                color: white;
+                transition: background-color 0.3s;
+            }
+            button:hover {
+                background-color: #c0392b;
+            }
+            button:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            }
+            .spinner-container {
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                text-align: center;
+            }
+            .lds-dual-ring-progress {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                margin: 0 auto;
+            }
+            .progress-ring {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background: conic-gradient(#3498db 0%, #eee 0%);
+                transition: background 0.3s ease;
+            }
+            .progress-ring::after {
+                content: '';
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                width: 60px;
+                height: 60px;
+                background: white;
+                border-radius: 50%;
+            }
+            .loading-text {
+                margin-top: 10px;
+                font-size: 18px;
+                color: #333;
+            }
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Vaciar Colecciones</h1>
+            <div class="buttons-container">
+                <button id="btnVaciarConsumos">Vaciar Consumos</button>
+                <button id="btnVaciarPacientes">Vaciar Pacientes</button>
+                <button id="btnVaciarHistorial">Vaciar Historial</button>
+                <button id="btnVaciarTodo">Vaciar Todo</button> <!-- Nuevo botón -->
+            </div>
+        </div>
+
+        <div class="overlay hidden" id="overlayDelete">
+            <div class="spinner-container">
+                <div class="lds-dual-ring-progress">
+                    <div class="progress-ring" id="progressRing"></div>
+                </div>
+                <div class="loading-text" id="loadingTextDelete">Eliminando... <span id="progressPercentage">0%</span></div>
+            </div>
+        </div>
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+            import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+            // Configuración de Firebase para pacientes
+            const firebaseConfigPatients = {
+                apiKey: "AIzaSyAREVJYLuZXqKAEzroVMtqEHvj1l2vE_lQ",
+                authDomain: "implantes-d2fbd.firebaseapp.com",
+                projectId: "implantes-d2fbd",
+                storageBucket: "implantes-d2fbd.firebasestorage.app",
+                messagingSenderId: "1063212294537",
+                appId: "1:1063212294537:web:9e0cc7290109da704f4158",
+                measurementId: "G-3XGJW3EHLQ"
+            };
+
+            // Configuración de Firebase para historial
+            const firebaseConfigHistorial = {
+                apiKey: "AIzaSyDlOW1-vrW4uiXrveFPoBcJ1ImZlPqzzlA",
+                authDomain: "consignaciones-ee423.firebaseapp.com",
+                projectId: "consignaciones-ee423",
+                storageBucket: "consignaciones-ee423.firebasestorage.app",
+                messagingSenderId: "992838229253",
+                appId: "1:992838229253:web:38462a4886e4ede6a7ab6c",
+                measurementId: "G-K58BRH151H"
+            };
+
+            // Inicializar Firebase
+            const appPatients = initializeApp(firebaseConfigPatients, "patientsApp");
+            const dbPatients = getFirestore(appPatients);
+            const appHistorial = initializeApp(firebaseConfigHistorial, "historialApp");
+            const dbHistorial = getFirestore(appHistorial);
+
+            // Elementos del DOM
+            const btnVaciarConsumos = document.getElementById("btnVaciarConsumos");
+            const btnVaciarPacientes = document.getElementById("btnVaciarPacientes");
+            const btnVaciarHistorial = document.getElementById("btnVaciarHistorial");
+            const btnVaciarTodo = document.getElementById("btnVaciarTodo"); // Nuevo botón
+            const overlayDelete = document.getElementById("overlayDelete");
+            const progressRing = document.getElementById("progressRing");
+            const progressPercentage = document.getElementById("progressPercentage");
+
+            // Función para actualizar el progreso
+            function updateProgress(processed, total) {
+                const percentage = total > 0 ? Math.round((processed / total) * 100) : 100;
+                progressPercentage.textContent = `${percentage}%`;
+                progressRing.style.background = `conic-gradient(#3498db ${percentage}%, #eee ${percentage}%)`;
+            }
+
+            // Función para vaciar una colección
+            async function vaciarColeccion(coleccionNombre, db) {
+                try {
+                    const coleccionRef = collection(db, coleccionNombre);
+                    const snapshot = await getDocs(coleccionRef);
+                    const totalDocs = snapshot.size;
+
+                    if (totalDocs === 0) return 0; // Retorna 0 documentos procesados si está vacía
+
+                    let processedDocs = 0;
+                    const deletePromises = snapshot.docs.map(async (documento) => {
+                        const docRef = doc(db, coleccionNombre, documento.id);
+                        await deleteDoc(docRef);
+                        processedDocs++;
+                        return processedDocs;
+                    });
+
+                    await Promise.all(deletePromises);
+                    return totalDocs; // Retorna el total de documentos procesados
+                } catch (error) {
+                    console.error(`Error al vaciar la colección ${coleccionNombre}:`, error);
+                    throw error;
+                }
+            }
+
+            // Función para vaciar una colección con UI
+            async function vaciarColeccionConUI(coleccionNombre, db) {
+                try {
+                    btnVaciarConsumos.disabled = true;
+                    btnVaciarPacientes.disabled = true;
+                    btnVaciarHistorial.disabled = true;
+                    btnVaciarTodo.disabled = true;
+
+                    overlayDelete.classList.remove("hidden");
+
+                    const totalDocs = await vaciarColeccion(coleccionNombre, db);
+
+                    if (totalDocs === 0) {
+                        updateProgress(1, 1);
+                        setTimeout(() => {
+                            overlayDelete.classList.add("hidden");
+                            alert(`La colección "${coleccionNombre}" ya está vacía.`);
+                            btnVaciarConsumos.disabled = false;
+                            btnVaciarPacientes.disabled = false;
+                            btnVaciarHistorial.disabled = false;
+                            btnVaciarTodo.disabled = false;
+                        }, 500);
+                    } else {
+                        updateProgress(totalDocs, totalDocs);
+                        setTimeout(() => {
+                            overlayDelete.classList.add("hidden");
+                            alert(`Colección "${coleccionNombre}" vaciada exitosamente.`);
+                            btnVaciarConsumos.disabled = false;
+                            btnVaciarPacientes.disabled = false;
+                            btnVaciarHistorial.disabled = false;
+                            btnVaciarTodo.disabled = false;
+                        }, 500);
+                    }
+                } catch (error) {
+                    overlayDelete.classList.add("hidden");
+                    alert(`Error al vaciar la colección "${coleccionNombre}": ${error.message}`);
+                    btnVaciarConsumos.disabled = false;
+                    btnVaciarPacientes.disabled = false;
+                    btnVaciarHistorial.disabled = false;
+                    btnVaciarTodo.disabled = false;
+                }
+            }
+
+            // Función para vaciar todas las colecciones
+            async function vaciarTodo() {
+                try {
+                    btnVaciarConsumos.disabled = true;
+                    btnVaciarPacientes.disabled = true;
+                    btnVaciarHistorial.disabled = true;
+                    btnVaciarTodo.disabled = true;
+
+                    overlayDelete.classList.remove("hidden");
+
+                    const colecciones = [
+                        { nombre: "consumos", db: dbPatients },
+                        { nombre: "pacientes", db: dbPatients },
+                        { nombre: "historial", db: dbHistorial }
+                    ];
+
+                    let totalDocsGlobal = 0;
+                    let processedDocsGlobal = 0;
+
+                    for (const { nombre, db } of colecciones) {
+                        const coleccionRef = collection(db, nombre);
+                        const snapshot = await getDocs(coleccionRef);
+                        totalDocsGlobal += snapshot.size;
+                    }
+
+                    if (totalDocsGlobal === 0) {
+                        updateProgress(1, 1);
+                        setTimeout(() => {
+                            overlayDelete.classList.add("hidden");
+                            alert("Todas las colecciones ya están vacías.");
+                            btnVaciarConsumos.disabled = false;
+                            btnVaciarPacientes.disabled = false;
+                            btnVaciarHistorial.disabled = false;
+                            btnVaciarTodo.disabled = false;
+                        }, 500);
+                        return;
+                    }
+
+                    for (const { nombre, db } of colecciones) {
+                        const processed = await vaciarColeccion(nombre, db);
+                        processedDocsGlobal += processed;
+                        updateProgress(processedDocsGlobal, totalDocsGlobal);
+                    }
+
+                    setTimeout(() => {
+                        overlayDelete.classList.add("hidden");
+                        alert("Todas las colecciones han sido vaciadas exitosamente.");
+                        btnVaciarConsumos.disabled = false;
+                        btnVaciarPacientes.disabled = false;
+                        btnVaciarHistorial.disabled = false;
+                        btnVaciarTodo.disabled = false;
+                    }, 500);
+                } catch (error) {
+                    overlayDelete.classList.add("hidden");
+                    alert(`Error al vaciar todas las colecciones: ${error.message}`);
+                    btnVaciarConsumos.disabled = false;
+                    btnVaciarPacientes.disabled = false;
+                    btnVaciarHistorial.disabled = false;
+                    btnVaciarTodo.disabled = false;
+                }
+            }
+
+            // Eventos de los botones
+            btnVaciarConsumos.addEventListener("click", async () => {
+                if (confirm("¿Estás seguro de que deseas vaciar la colección 'consumos'? Esta acción no se puede deshacer.")) {
+                    await vaciarColeccionConUI("consumos", dbPatients);
+                }
+            });
+
+            btnVaciarPacientes.addEventListener("click", async () => {
+                if (confirm("¿Estás seguro de que deseas vaciar la colección 'pacientes'? Esta acción no se puede deshacer.")) {
+                    await vaciarColeccionConUI("pacientes", dbPatients);
+                }
+            });
+
+            btnVaciarHistorial.addEventListener("click", async () => {
+                if (confirm("¿Estás seguro de que deseas vaciar la colección 'historial'? Esta acción no se puede deshacer.")) {
+                    await vaciarColeccionConUI("historial", dbHistorial);
+                }
+            });
+
+            btnVaciarTodo.addEventListener("click", async () => {
+                if (confirm("¿Estás seguro de que deseas vaciar TODAS las colecciones ('consumos', 'pacientes', 'historial')? Esta acción no se puede deshacer.")) {
+                    await vaciarTodo();
+                }
+            });
+        </script>
+    </body>
+</html>

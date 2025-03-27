@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tablasID</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="tablasID.css"> 
+    <style>
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10001;
+            display: none;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-content, #print-content * {
+                visibility: visible;
+            }
+            #print-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                border: 1px solid #000;
+                page-break-inside: avoid;
+            }
+            th, td {
+                border: 1px solid #000;
+                padding: 4px;
+                font-size: 10px;
+                text-align: center;
+                line-height: 1;
+            }
+            th {
+                background-color: #e0e0e0;
+                color: #000;
+                border-bottom: 2px solid #000;
+            }
+            tr {
+                height: 16px;
+            }
+            th:nth-child(7), td:nth-child(7),
+            th:nth-child(8), td:nth-child(8),
+            th:nth-child(9), td:nth-child(9) {
+                display: none;
+            }
+            h1 {
+                text-align: center;
+                font-size: 14px;
+                margin: 5px 0;
+            }
+            p {
+                font-size: 10px;
+                margin: 5px 0;
+            }
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+        }
+
+        .total-row {
+            font-weight: bold;
+            background-color: #f0f0f0;
+        }
+
+        td:nth-child(7), td:nth-child(8) {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <div class="header-container">
+            <div class="header-left">TRAUMA</div>
+            <div class="header-center">
+                <h1 id="main-title">Fijadores externos #1 <i class="fas fa-check-circle fa-lg"></i></h1>
+            </div>
+            <div class="header-right">
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha" name="fecha" value="" onclick="this.showPicker()">
+            </div>
+        </div>
+
+        <div class="division" id="division-line"></div>   
+
+        <div class="outer-container" id="tableContainer">
+            <div class="table-container" id="codigosTable" style="display:block;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Acciones<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>ID<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Código<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Descripción<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Ideal<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Cantidad<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Precio<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Total<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Check<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody> 
+                </table>
+            </div>
+            <div id="pagination" class="no-print">
+                <button id="btnPrevious"><i class="fas fa-chevron-left"></i> Anterior</button>
+                <span id="pageNumber">Página 1 de </span>
+                <button id="btnNext">Siguiente <i class="fas fa-chevron-right"></i></button>
+                <div class="right-buttons">
+                    <button id="btnAdd">Agregar</button>
+                    <button id="btnPrint">Imprimir</button>
+                    <button id="btnDownload">Descargar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="addModal" class="modal-add no-print" style="display: none;">
+            <div class="modal-add-content">
+                <span class="close-add">×</span>
+                <h2>Agregar Nuevo Elemento</h2>
+                <form id="addForm">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" id="codigo" name="codigo" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label>
+                        <input type="text" id="descripcion" name="descripcion" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="ideal">Ideal:</label>
+                        <input type="number" id="ideal" name="ideal" min="0" max="20" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="number" id="cantidad" name="cantidad" min="0" max="20" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="precio">Precio:</label>
+                        <input type="text" id="precio" name="precio" required autocomplete="off" placeholder="Ej: 10000">
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit">Guardar</button>
+                        <button type="button" class="cancel-btn">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="editModal" class="modal-add no-print" style="display: none;">
+            <div class="modal-add-content">
+                <span class="close-edit">×</span>
+                <h2>Editar Elemento</h2>
+                <form id="editForm">
+                    <input type="hidden" id="editDocId">
+                    <div class="form-group">
+                        <label for="editCodigo">Código:</label>
+                        <input type="text" id="editCodigo" name="editCodigo" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescripcion">Descripción:</label>
+                        <input type="text" id="editDescripcion" name="editDescripcion" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="editIdeal">Ideal:</label>
+                        <input type="number" id="editIdeal" name="editIdeal" min="0" max="20" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCantidad">Cantidad:</label>
+                        <input type="number" id="editCantidad" name="editCantidad" min="0" max="20" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPrecio">Precio:</label>
+                        <input type="text" id="editPrecio" name="editPrecio" required autocomplete="off" placeholder="Ej: 10000">
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit">Guardar Cambios</button>
+                        <button type="button" class="cancel-edit-btn">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="deleteModal" class="modal-add no-print" style="display: none;">
+            <div class="modal-add-content">
+                <span class="close-delete">×</span>
+                <h2>Confirmar Eliminación</h2>
+                <p>¿Estás seguro de que deseas eliminar el código <span id="deleteCodigo"></span>?</p>
+                <div class="form-buttons">
+                    <button id="confirmDelete">Eliminar</button>
+                    <button type="button" class="cancel-delete-btn">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="notification" class="notification no-print"></div>
+
+        <div id="print-content" style="display: none;"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, getDoc } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXPdub3tHM9K2zUViBuC05CL6M-zE_IM4",
+            authDomain: "cajas-11e7b.firebaseapp.com",
+            projectId: "cajas-11e7b",
+            storageBucket: "cajas-11e7b.firebasestorage.app",
+            messagingSenderId: "106380626220",
+            appId: "1:106380626220:web:4a1741a20624bc177a8489",
+            measurementId: "G-MZZYHPPECZ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        function formatChileanPeso(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function unformatChileanPeso(value) {
+            return parseInt(value.replace(/\./g, ""));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const fechaInput = document.getElementById('fecha');
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            fechaInput.value = formattedDate;
+
+            const btnAdd = document.getElementById('btnAdd');
+            const addModal = document.getElementById('addModal');
+            const closeAdd = document.querySelector('.close-add');
+            const cancelBtn = document.querySelector('.cancel-btn');
+            const addForm = document.getElementById('addForm');
+            const editModal = document.getElementById('editModal');
+            const closeEdit = document.querySelector('.close-edit');
+            const cancelEditBtn = document.querySelector('.cancel-edit-btn');
+            const editForm = document.getElementById('editForm');
+            const deleteModal = document.getElementById('deleteModal');
+            const closeDelete = document.querySelector('.close-delete');
+            const cancelDeleteBtn = document.querySelector('.cancel-delete-btn');
+            const confirmDelete = document.getElementById('confirmDelete');
+            const tableBody = document.getElementById('table-body');
+            const notification = document.getElementById('notification');
+            const btnPrint = document.getElementById('btnPrint');
+            const btnDownload = document.getElementById('btnDownload');
+
+            function restrictInput(inputId) {
+                const input = document.getElementById(inputId);
+                input.addEventListener('input', function(e) {
+                    let value = e.target.value;
+                    if (value === '') return;
+                    if (isNaN(value) || value < 0 || value > 20) {
+                        e.target.value = value.slice(0, -1);
+                    }
+                });
+            }
+            restrictInput('ideal');
+            restrictInput('cantidad');
+            restrictInput('editIdeal');
+            restrictInput('editCantidad');
+
+            function setupPriceFormatting(inputId) {
+                const input = document.getElementById(inputId);
+                input.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value) {
+                        e.target.value = formatChileanPeso(value);
+                    }
+                });
+            }
+            setupPriceFormatting('precio');
+            setupPriceFormatting('editPrecio');
+
+            function showNotification(message) {
+                notification.textContent = message;
+                notification.style.display = 'block';
+                setTimeout(() => notification.style.display = 'none', 3000);
+            }
+
+            btnAdd.addEventListener('click', () => addModal.style.display = 'block');
+            closeAdd.addEventListener('click', () => addModal.style.display = 'none');
+            cancelBtn.addEventListener('click', () => addModal.style.display = 'none');
+            window.addEventListener('click', (event) => {
+                if (event.target === addModal) addModal.style.display = 'none';
+                if (event.target === editModal) editModal.style.display = 'none';
+                if (event.target === deleteModal) deleteModal.style.display = 'none';
+            });
+
+            addForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const codigo = document.getElementById('codigo').value.trim();
+                const descripcion = document.getElementById('descripcion').value;
+                const ideal = parseInt(document.getElementById('ideal').value);
+                const cantidad = parseInt(document.getElementById('cantidad').value);
+                const precio = unformatChileanPeso(document.getElementById('precio').value);
+
+                try {
+                    const querySnapshot = await getDocs(collection(db, 'fijadores1'));
+                    let codigoExistente = null;
+                    let idExistente = null;
+
+                    querySnapshot.forEach((docSnapshot) => {
+                        const data = docSnapshot.data();
+                        if (data.codigo.trim() === codigo) {
+                            codigoExistente = data.codigo;
+                            idExistente = data.id;
+                        }
+                    });
+
+                    if (codigoExistente) {
+                        showNotification(`Ya está registrado el código ${codigoExistente}, se encuentra con el ID ${idExistente}`);
+                        return;
+                    }
+
+                    const newId = String(querySnapshot.size + 1).padStart(3, '0');
+                    await addDoc(collection(db, 'fijadores1'), {
+                        id: newId,
+                        codigo: codigo,
+                        descripcion: descripcion,
+                        ideal: ideal,
+                        cantidad: cantidad,
+                        precio: precio
+                    });
+                    addForm.reset();
+                    addModal.style.display = 'none';
+                    showNotification(`Se ha generado el código ${codigo}`);
+                    cargarDatosTabla();
+                } catch (error) {
+                    console.error('Error al guardar:', error);
+                    showNotification('Error al guardar el elemento. Intenta nuevamente.');
+                }
+            });
+
+            closeEdit.addEventListener('click', () => editModal.style.display = 'none');
+            cancelEditBtn.addEventListener('click', () => editModal.style.display = 'none');
+
+            editForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const docId = document.getElementById('editDocId').value;
+                const codigo = document.getElementById('editCodigo').value;
+                const descripcion = document.getElementById('editDescripcion').value;
+                const ideal = parseInt(document.getElementById('editIdeal').value);
+                const cantidad = parseInt(document.getElementById('editCantidad').value);
+                const precio = unformatChileanPeso(document.getElementById('editPrecio').value);
+
+                try {
+                    await updateDoc(doc(db, 'fijadores1', docId), {
+                        codigo: codigo,
+                        descripcion: descripcion,
+                        ideal: ideal,
+                        cantidad: cantidad,
+                        precio: precio
+                    });
+                    editModal.style.display = 'none';
+                    showNotification(`Se modificó el código ${codigo}`);
+                    cargarDatosTabla();
+                } catch (error) {
+                    console.error('Error al editar:', error);
+                }
+            });
+
+            async function cargarDatosTabla() {
+                tableBody.innerHTML = '';
+                const querySnapshot = await getDocs(collection(db, 'fijadores1'));
+                
+                const documentos = [];
+                querySnapshot.forEach((docSnapshot) => {
+                    documentos.push({ id: docSnapshot.id, data: docSnapshot.data() });
+                });
+
+                documentos.sort((a, b) => a.data.id.localeCompare(b.data.id));
+
+                let totalIdeal = 0;
+                let totalCantidad = 0;
+                let totalPrecio = 0;
+                let totalMultiplicacion = 0;
+
+                documentos.forEach(({ id, data }) => {
+                    totalIdeal += data.ideal;
+                    totalCantidad += data.cantidad;
+                    totalPrecio += data.precio;
+                    const multiplicacion = data.cantidad * data.precio;
+                    totalMultiplicacion += multiplicacion;
+
+                    const row = document.createElement('tr');
+
+                    const accionesTd = document.createElement('td');
+                    const deleteIcon = document.createElement('i');
+                    deleteIcon.className = 'fas fa-trash-alt';
+                    deleteIcon.style.cursor = 'pointer';
+                    deleteIcon.addEventListener('click', () => {
+                        document.getElementById('deleteCodigo').textContent = data.codigo;
+                        document.getElementById('confirmDelete').dataset.docId = id;
+                        deleteModal.style.display = 'block';
+                    });
+
+                    const editIcon = document.createElement('i');
+                    editIcon.className = 'fas fa-edit';
+                    editIcon.style.cursor = 'pointer';
+                    editIcon.style.marginLeft = '10px';
+                    editIcon.addEventListener('click', () => {
+                        document.getElementById('editDocId').value = id;
+                        document.getElementById('editCodigo').value = data.codigo;
+                        document.getElementById('editDescripcion').value = data.descripcion;
+                        document.getElementById('editIdeal').value = data.ideal;
+                        document.getElementById('editCantidad').value = data.cantidad;
+                        document.getElementById('editPrecio').value = formatChileanPeso(data.precio);
+                        editModal.style.display = 'block';
+                    });
+
+                    accionesTd.appendChild(deleteIcon);
+                    accionesTd.appendChild(editIcon);
+
+                    row.innerHTML = `
+                        <td>${data.id}</td>
+                        <td>${data.codigo}</td>
+                        <td>${data.descripcion}</td>
+                        <td>${data.ideal}</td>
+                        <td class="editable-cantidad" data-doc-id="${id}">${data.cantidad}</td>
+                        <td>${formatChileanPeso(data.precio)}</td>
+                        <td>${formatChileanPeso(multiplicacion)}</td>
+                        <td><input type="checkbox"></td>
+                    `;
+                    row.insertBefore(accionesTd, row.firstChild);
+                    tableBody.appendChild(row);
+                });
+
+                const totalRow = document.createElement('tr');
+                totalRow.className = 'total-row';
+                totalRow.innerHTML = `
+                    <td colspan="3"></td>
+                    <td>Total</td>
+                    <td>${totalIdeal}</td>
+                    <td>${totalCantidad}</td>
+                    <td>${formatChileanPeso(totalPrecio)}</td>
+                    <td>${formatChileanPeso(totalMultiplicacion)}</td>
+                    <td></td>
+                `;
+                tableBody.appendChild(totalRow);
+
+                document.querySelectorAll('.editable-cantidad').forEach(cell => {
+                    cell.addEventListener('dblclick', function() {
+                        const originalCantidad = this.textContent;
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.min = '0';
+                        input.max = '20';
+                        input.value = originalCantidad;
+                        input.style.width = '50px';
+                        this.innerHTML = '';
+                        this.appendChild(input);
+                        input.focus();
+
+                        input.addEventListener('input', function(e) {
+                            let value = e.target.value;
+                            if (value === '') return;
+                            if (isNaN(value) || value < 0 || value > 20) {
+                                e.target.value = value.slice(0, -1);
+                            }
+                        });
+
+                        input.addEventListener('blur', async () => {
+                            const newCantidad = parseInt(input.value);
+                            if (newCantidad !== parseInt(originalCantidad)) {
+                                try {
+                                    await updateDoc(doc(db, 'fijadores1', this.dataset.docId), {
+                                        cantidad: newCantidad
+                                    });
+                                    showNotification(`Se modificó la cantidad del código ${this.previousElementSibling.previousElementSibling.textContent} a ${newCantidad}`);
+                                    cargarDatosTabla();
+                                } catch (error) {
+                                    console.error('Error al actualizar cantidad:', error);
+                                }
+                            } else {
+                                this.textContent = originalCantidad;
+                            }
+                        });
+
+                        input.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') input.blur();
+                        });
+                    });
+                });
+            }
+
+            confirmDelete.addEventListener('click', async () => {
+                const docId = confirmDelete.dataset.docId;
+                try {
+                    const docSnap = await getDoc(doc(db, 'fijadores1', docId));
+                    const codigo = docSnap.data().codigo;
+                    await deleteDoc(doc(db, 'fijadores1', docId));
+                    deleteModal.style.display = 'none';
+                    showNotification(`Se eliminó el código ${codigo}`);
+                    cargarDatosTabla();
+                } catch (error) {
+                    console.error('Error al eliminar:', error);
+                }
+            });
+
+            btnPrint.addEventListener('click', async () => {
+                const printContent = document.getElementById('print-content');
+                const fecha = document.getElementById('fecha').value;
+                const [year, month, day] = fecha.split('-');
+                const formattedFecha = `${day}-${month}-${year}`;
+
+                let html = `
+                    <h1>Fijadores externos #1</h1>
+                    <p>Fecha: ${formattedFecha}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Código</th>
+                                <th>Descripción</th>
+                                <th>Ideal</th>
+                                <th>Cantidad</th>
+                                <th>Check</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                const querySnapshot = await getDocs(collection(db, 'fijadores1'));
+                const documentos = [];
+                querySnapshot.forEach((docSnapshot) => {
+                    documentos.push({ id: docSnapshot.id, data: docSnapshot.data() });
+                });
+                documentos.sort((a, b) => a.data.id.localeCompare(b.data.id));
+
+                let totalIdeal = 0;
+                let totalCantidad = 0;
+
+                documentos.forEach(({ data }) => {
+                    totalIdeal += data.ideal;
+                    totalCantidad += data.cantidad;
+                    html += `
+                        <tr>
+                            <td>${data.id}</td>
+                            <td>${data.codigo}</td>
+                            <td>${data.descripcion}</td>
+                            <td>${data.ideal}</td>
+                            <td>${data.cantidad}</td>
+                            <td><input type="checkbox"></td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                        <tr class="total-row">
+                            <td colspan="3"></td>
+                            <td>Total</td>
+                            <td>${totalIdeal}</td>
+                            <td>${totalCantidad}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                `;
+
+                printContent.innerHTML = html;
+                printContent.style.display = 'block';
+                window.print();
+                printContent.style.display = 'none';
+            });
+
+            btnDownload.addEventListener('click', async () => {
+                const querySnapshot = await getDocs(collection(db, 'fijadores1'));
+                const data = []; 
+                let totalIdeal = 0;
+                let totalCantidad = 0;
+                let totalPrecio = 0;
+                let totalMultiplicacion = 0;
+
+                const documentos = [];
+                querySnapshot.forEach((docSnapshot) => {
+                    documentos.push({ id: docSnapshot.id, data: docSnapshot.data() });
+                });
+                documentos.sort((a, b) => a.data.id.localeCompare(b.data.id));
+
+                documentos.forEach(({ data: docData }) => { 
+                    const multiplicacion = docData.cantidad * docData.precio;
+                    data.push({ 
+                        ID: docData.id,
+                        Código: docData.codigo,
+                        Descripción: docData.descripcion,
+                        Ideal: docData.ideal,
+                        Cantidad: docData.cantidad,
+                        Precio: formatChileanPeso(docData.precio),
+                        Total: formatChileanPeso(multiplicacion),
+                        Check: ''
+                    });
+                    totalIdeal += docData.ideal;
+                    totalCantidad += docData.cantidad;
+                    totalPrecio += docData.precio;
+                    totalMultiplicacion += multiplicacion;
+                });
+
+                data.push({
+                    ID: '',
+                    Código: '',
+                    Descripción: 'Total',
+                    Ideal: totalIdeal,
+                    Cantidad: totalCantidad,
+                    Precio: formatChileanPeso(totalPrecio),
+                    Total: formatChileanPeso(totalMultiplicacion),
+                    Check: ''
+                });
+
+                const worksheet = XLSX.utils.json_to_sheet(data);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Fijadores');
+                XLSX.writeFile(workbook, 'fijadores_externos_1.xlsx');
+            });
+
+            cargarDatosTabla();
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>

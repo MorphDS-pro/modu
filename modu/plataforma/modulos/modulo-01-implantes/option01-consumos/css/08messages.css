@@ -1,0 +1,152 @@
+.messages-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.message {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+  border-left: 5px solid;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  position: relative;
+  width: 400px;
+}
+
+.message.success {
+  border-left-color: #28a745;
+  background-color: #eaf8ed;
+  color: #155724;
+}
+
+.message.success i {
+  color: #28a745;
+}
+
+.message.warning {
+  border-left-color: #ffc107;
+  background-color: #fff8e5;
+  color: #856404;
+}
+
+.message.warning i {
+  color: #ffc107;
+}
+
+.message.error {
+  border-left-color: #dc3545;
+  background-color: #fde2e4;
+  color: #721c24;
+}
+
+.message.error i {
+  color: #dc3545;
+}
+
+.message.info {
+  border-left-color: #17a2b8;
+  background-color: #e4f5f8;
+  color: #0c5460;
+}
+
+.message.info i {
+  color: #17a2b8;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0 5px;
+  line-height: 1;
+  transition: color 0.3s ease;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+@keyframes fadeOut {
+  from {
+      opacity: 1;
+      transform: translateY(0);
+  }
+  to {
+      opacity: 0;
+      transform: translateY(-20px);
+  }
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@media (max-width: 1200px) {
+  .messages-container {
+    right: 15px;
+    top: 15px;
+  }
+  .message {
+    width: 350px;
+    padding: 12px;
+    font-size: 14px;
+  }
+  .close-btn {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .messages-container {
+    right: 10px;
+    top: 10px;
+    gap: 8px;
+  }
+  .message {
+    width: 90%;
+    padding: 10px;
+    font-size: 13px;
+    border-left-width: 4px;
+  }
+  .close-btn {
+    font-size: 16px;
+    top: 4px;
+    right: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .messages-container {
+    right: 5px;
+    top: 5px;
+    gap: 6px;
+  }
+  .message {
+    width: 95%;
+    padding: 8px;
+    font-size: 12px;
+    border-left-width: 3px;
+  }
+  .close-btn {
+    font-size: 14px;
+    top: 3px;
+    right: 3px;
+  }
+}

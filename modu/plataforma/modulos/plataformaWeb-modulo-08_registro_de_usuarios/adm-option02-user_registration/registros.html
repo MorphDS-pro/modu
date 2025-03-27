@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - MorphDS Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .main-container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            gap: 20px;
+        }
+
+        .form-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 40%;
+            min-width: 300px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        h1 i {
+            margin-right: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-register:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-register i {
+            margin-right: 8px;
+        }
+
+        .outer-container {
+            margin-top: 10px;
+            width: 60%;
+            max-width: 1700px;
+            overflow-x: auto;
+        }
+
+        .table-container {
+            width: 100%;
+            height: 540px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            min-width: 800px;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border: none;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            text-align: start;
+            width: 100px;
+            min-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+            padding: 6px;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            position: sticky;
+            top: 0;
+            text-align: start;
+            font-size: 12px;
+            color: #202020;
+            z-index: 1;
+        }
+
+        td {
+            font-size: 12px;
+            color: #555;
+        }
+
+        tr {
+            height: 8px;
+        }
+
+        .resizer {
+            position: absolute;
+            top: 0;
+            right: -2px;
+            width: 5px;
+            height: 100%;
+            cursor: ew-resize;
+            background: transparent;
+        }
+
+        .resizer:hover {
+            background: #666;
+        }
+
+        tr:hover td {
+            background-color: #f0f0f0;
+        }
+
+        .filter-icon {
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 4px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .filter-input.hidden {
+            display: none;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner-container {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .lds-dual-ring {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .lds-dual-ring:after {
+            content: " ";
+            display: block;
+            width: 32px;
+            height: 32px;
+            margin: 4px;
+            border-radius: 50%;
+            border: 4px solid #007BFF;
+            border-color: #007BFF transparent #007BFF transparent;
+            animation: lds-dual-ring 1.2s linear infinite;
+        }
+
+        @keyframes lds-dual-ring {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .messages-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+
+        .message {
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .message i {
+            margin-right: 10px;
+        }
+
+        .close-btn {
+            margin-left: 10px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: inherit;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        th:last-child, td:last-child {
+            width: 80px; /* Ajusta el ancho de la columna de acciones */
+            min-width: 80px;
+        }
+
+        .btn-save {
+            padding: 5px 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-save:hover {
+            background-color: #218838;
+        }
+
+        .btn-save i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container" id="content">
+        <div class="form-container">
+            <h1><i class="fas fa-user-plus"></i> Registro de Usuarios</h1>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registrarNombreCompleto">Nombre Completo</label>
+                    <input type="text" id="registrarNombreCompleto" placeholder="Ingrese su nombre completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="registrarRut">RUT</label>
+                    <input type="text" id="registrarRut" placeholder="Ingrese su RUT" required>
+                </div>
+                <div class="form-group">
+                    <label for="registrarCorreo">Correo Electrónico</label>
+                    <input type="email" id="registrarCorreo" placeholder="Ingrese su correo" required>
+                </div>
+                <div class="form-group">
+                    <label for="registrarIdentidad">Identidad</label>
+                    <select id="registrarIdentidad" required>
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="hombre">Hombre</option>
+                        <option value="mujer">Mujer</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="registrarUsuario">Nombre de Usuario</label>
+                    <input type="text" id="registrarUsuario" placeholder="Ingrese un nombre de usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="registrarContrasena">Contraseña</label>
+                    <input type="password" id="registrarContrasena" placeholder="Ingrese una contraseña" required>
+                </div>
+                <div class="form-group">
+                    <label for="registrarRol">Rol</label>
+                    <select id="registrarRol" required>
+                        <option value="" disabled selected>Seleccione un rol</option>
+                        <option value="usuario">Usuario</option>
+                        <option value="admin">Administrador</option>
+                        <option value="corporativo">Corporativo</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-register"><i class="fas fa-save"></i> Registrar</button>
+            </form>
+        </div>
+
+        <div class="outer-container">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="filter-icon" onclick="toggleFilter(0)"><i class="fas fa-filter"></i></span>Nombre Completo
+                                <input type="text" class="filter-input hidden" onkeyup="filterTable(0)" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon" onclick="toggleFilter(1)"><i class="fas fa-filter"></i></span>RUT
+                                <input type="text" class="filter-input hidden" onkeyup="filterTable(1)" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon" onclick="toggleFilter(2)"><i class="fas fa-filter"></i></span>Correo
+                                <input type="text" class="filter-input hidden" onkeyup="filterTable(2)" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon" onclick="toggleFilter(3)"><i class="fas fa-filter"></i></span>Identidad
+                                <input type="text" class="filter-input hidden" onkeyup="filterTable(3)" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon" onclick="toggleFilter(4)"><i class="fas fa-filter"></i></span>Usuario
+                                <input type="text" class="filter-input hidden" onkeyup="filterTable(4)" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon" onclick="toggleFilter(5)"><i class="fas fa-filter"></i></span>Rol
+                                <input type="text" class="filter-input hidden" onkeyup="filterTable(5)" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>
+                                <span class="filter-icon" onclick="toggleFilter(6)"><i class="fas fa-filter"></i></span>Fecha Registro
+                                <input type="text" class="filter-input hidden" onkeyup="filterTable(6)" placeholder="Filtrar...">
+                                <span class="resizer"></span>
+                            </th>
+                            <th>Acciones</th> <!-- Nueva columna para el botón de guardar -->
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay hidden" id="overlay">
+        <div class="spinner-container">
+            <div class="lds-dual-ring"></div>
+            <div class="loading-text">Registrando...</div>
+        </div>
+    </div>
+
+    <div class="messages-container" id="messagesContainer">
+        <div class="message success hidden" id="messageSuccess">
+            <i class="fas fa-check-circle"></i>
+            <div class="text" id="successText"></div>
+            <button class="close-btn" id="closeMessageSuccess">×</button>
+        </div>
+        <div class="message error hidden" id="messageError">
+            <i class="fas fa-times-circle"></i>
+            <div class="text" id="errorText"></div>
+            <button class="close-btn" id="closeMessageError">×</button>
+        </div>
+    </div>
+
+    <script type="module" src="registroUsuarios.js"></script>
+    <script type="module" src="resizer.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDsSD0EcY_QKPcqycpiynXg--mO9VMvRDs",
+            authDomain: "usuarios-d4364.firebaseapp.com",
+            projectId: "usuarios-d4364",
+            storageBucket: "usuarios-d4364.firebasestorage.app",
+            messagingSenderId: "1050588492432",
+            appId: "1:1050588492432:web:5803cad6718dfa36a09e15",
+            measurementId: "G-SZD8728PHP"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            const content = document.getElementById('content');
+            const userId = sessionStorage.getItem('userId');
+            const roles = JSON.parse(sessionStorage.getItem('roles') || '[]');
+
+            if (user && userId && roles.length > 0) {
+                content.classList.remove('hidden');
+            } else {
+                window.location.href = '../../../../login.html'; 
+            }
+        });
+    </script>
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archivos consignados</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="principal.css"> 
+    <style>
+        html, body {
+            height: 100vh;
+            margin: 0;
+        }
+    
+        body.modal-open {
+            overflow: hidden;
+        }
+    
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+    
+        .modal-content {
+            background-color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -55%);
+            padding: 10px;
+            border: 1px solid #888;
+            width: 1500px;
+            height: 850px;
+            max-width: 90vw;
+            border-radius: 5px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+    
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .autocomplete-container {
+            position: relative;
+            width: 100%;
+        }
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            z-index: 1001;
+            display: none;
+        }
+        .autocomplete-item {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .autocomplete-item:hover {
+            background-color: #f0f0f0;
+        }
+        .dropdown-arrow {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        #secondaryContent {
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+    
+        /* Estilos para el encabezado */
+        .header-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            flex-wrap: nowrap;
+            justify-content: space-between; /* Distribuir los elementos entre los extremos */
+            margin-bottom: 10px;
+        }
+    
+        .header-left {
+            flex: 0 0 auto;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            white-space: nowrap;
+        }
+    
+        .header-center {
+            flex: 1; /* Ocupar el espacio restante y centrar el contenido */
+            text-align: center;
+            white-space: nowrap;
+        }
+    
+        .header-right {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            text-align: right;
+        }
+    
+        .header-right label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 5px;
+            color: #333;
+        }
+    
+        .header-right input[type="date"] {
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #555;
+            min-width: 120px;
+        }
+    
+        .header-right input[type="date"]:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 10px #3498db;
+            outline: none;
+        }
+    
+        /* Ajuste para el h1 dentro de header-center */
+        .header-center h1 {
+            margin: 0;
+            font-size: 20px; /* Ajustar tamaño según el diseño general */
+            display: inline-flex;
+            align-items: center;
+        }
+    
+        /* Estilo para la línea divisoria */
+        .division {
+            border-bottom: 2px solid #ccc;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="main-title"> Archivos consignados  <i class="fas fa-check-circle fa-lg"></i></h1>
+        <div class="division" id="division-line"></div>   
+
+        <button id="newItemBtn" style="margin-bottom: 20px;">
+            <i class="fas fa-plus"></i> Nuevo Item
+        </button>
+
+        <div class="outer-container" id="tableContainer">
+            <div class="table-container" id="codigosTable" style="display:block;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Acciones<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>ID<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Empresa<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Nombre del archivo<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Cantidad de items<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Caja evaluada<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                            <th><span class="filter-icon"><i class="fas fa-filter"></i></span>Pendientes<input type="text" class="filter-input hidden" placeholder="Filtrar..."><span class="resizer"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody> 
+                </table>
+            </div>
+            <div id="pagination">
+                <button id="btnPrevious"><i class="fas fa-chevron-left"></i> Anterior</button>
+                <span id="pageNumber">Página 1 de </span>
+                <button id="btnNext">Siguiente <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div id="newItemModal" class="modal">
+            <div class="modal-content">
+                <span class="close">×</span>
+                <h2>Nuevo Item</h2>
+                <form id="newItemForm">
+                    <div class="form-group">
+                        <label for="empresa">Empresa:</label>
+                        <div class="autocomplete-container">
+                            <input type="text" id="empresa" name="empresa" required autocomplete="off">
+                            <span class="dropdown-arrow"><i class="fas fa-chevron-down"></i></span>
+                            <div id="autocompleteList" class="autocomplete-list"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombreArchivo">Nombre del archivo:</label>
+                        <input type="text" id="nombreArchivo" name="nombreArchivo" required autocomplete="off">
+                    </div>
+                    <button type="submit" id="createItemBtn">
+                        <i class="fas fa-save"></i> Crear Item
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div id="secondaryTableModal" class="modal">
+            <div class="modal-content">
+                <span class="close-secondary close">×</span>
+                <div id="secondaryContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Configuración de Firebase para "cajas-11e7b" (items)
+        const firebaseConfigCajas = {
+            apiKey: "AIzaSyDXPdub3tHM9K2zUViBuC05CL6M-zE_IM4",
+            authDomain: "cajas-11e7b.firebaseapp.com",
+            projectId: "cajas-11e7b",
+            storageBucket: "cajas-11e7b.firebasestorage.app",
+            messagingSenderId: "106380626220",
+            appId: "1:106380626220:web:4a1741a20624bc177a8489",
+            measurementId: "G-MZZYHPPECZ"
+        };
+    
+        // Configuración de Firebase para "prestaciones-57dcd" (companies)
+        const firebaseConfigCompanies = {
+            apiKey: "AIzaSyDfz0_7v43TmV0rlFM9UhnVVHLFGtRWhGw",
+            authDomain: "prestaciones-57dcd.firebaseapp.com",
+            projectId: "prestaciones-57dcd",
+            storageBucket: "prestaciones-57dcd.firebasestorage.app",
+            messagingSenderId: "409471759723",
+            appId: "1:409471759723:web:faa6812772f44baa3ec82e",
+            measurementId: "G-0CZ9BMJWMV"
+        };
+    
+        // Inicializar Firebase para "cajas"
+        const appCajas = firebase.initializeApp(firebaseConfigCajas, "cajas");
+        const dbCajas = appCajas.firestore();
+        const itemsCollection = dbCajas.collection('items');
+    
+        // Inicializar Firebase para "companies"
+        const appCompanies = firebase.initializeApp(firebaseConfigCompanies, "companies");
+        const dbCompanies = appCompanies.firestore();
+        const companiesCollection = dbCompanies.collection('companies');
+    
+        // Variable para el ID autoincremental
+        let currentId = 250001;
+    
+        // Elementos del DOM
+        const newItemBtn = document.getElementById('newItemBtn');
+        const modal = document.getElementById('newItemModal');
+        const closeBtn = document.querySelector('.close');
+        const newItemForm = document.getElementById('newItemForm');
+        const tableBody = document.getElementById('table-body');
+        const empresaInput = document.getElementById('empresa');
+        const autocompleteList = document.getElementById('autocompleteList');
+        const dropdownArrow = document.querySelector('.dropdown-arrow');
+        const secondaryTableModal = document.getElementById('secondaryTableModal');
+        const secondaryContent = document.getElementById('secondaryContent');
+        const closeSecondaryBtn = document.querySelector('.close-secondary');
+    
+        let companiesList = [];
+    
+        // Cargar empresas desde la colección "companies"
+        companiesCollection.get().then(snapshot => {
+            companiesList = snapshot.docs.map(doc => doc.data().empresa);
+        }).catch(error => {
+            console.error("Error al cargar empresas:", error);
+        });
+    
+        // Obtener el mayor ID existente al cargar la página
+        itemsCollection.orderBy('id', 'desc').limit(1).get().then(snapshot => {
+            if (!snapshot.empty) {
+                const maxId = snapshot.docs[0].data().id;
+                currentId = maxId + 1; // Establecer el siguiente ID
+            }
+        }).catch(error => {
+            console.error("Error al obtener el mayor ID:", error);
+        });
+    
+        // Mostrar/Ocultar formulario emergente
+        newItemBtn.onclick = function() {
+            modal.style.display = 'block';
+        }
+    
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+    
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    
+        // Función para mostrar sugerencias
+        function showSuggestions(value) {
+            autocompleteList.innerHTML = '';
+            if (!value && !dropdownArrow.clicked) return;
+    
+            const filteredCompanies = value 
+                ? companiesList.filter(empresa => empresa.toLowerCase().includes(value.toLowerCase()))
+                : companiesList;
+    
+            filteredCompanies.forEach(empresa => {
+                const item = document.createElement('div');
+                item.className = 'autocomplete-item';
+                item.textContent = empresa;
+                item.onclick = () => {
+                    empresaInput.value = empresa;
+                    autocompleteList.style.display = 'none';
+                };
+                autocompleteList.appendChild(item);
+            });
+    
+            autocompleteList.style.display = filteredCompanies.length ? 'block' : 'none';
+        }
+    
+        // Evento al escribir en el input
+        empresaInput.oninput = function() {
+            showSuggestions(this.value);
+        }
+    
+        // Mostrar todas las empresas al hacer clic en la flecha
+        dropdownArrow.onclick = function() {
+            this.clicked = true;
+            showSuggestions('');
+            this.clicked = false;
+        }
+    
+        // Ocultar lista al perder foco, salvo si se hace clic en la lista
+        empresaInput.onblur = function() {
+            setTimeout(() => {
+                autocompleteList.style.display = 'none';
+            }, 200);
+        }
+    
+        // Crear nuevo item y guardarlo en Firebase
+        newItemForm.onsubmit = function(event) {
+            event.preventDefault();
+            
+            const empresa = empresaInput.value;
+            const nombreArchivo = document.getElementById('nombreArchivo').value;
+    
+            itemsCollection.add({
+                id: currentId,
+                empresa: empresa,
+                nombreArchivo: nombreArchivo,
+                cantidadItems: '',
+                cajaEvaluada: '',
+                pendientes: ''
+            }).then(() => {
+                currentId++; // Incrementar ID después de guardar
+                newItemForm.reset();
+                modal.style.display = 'none';
+            }).catch(error => {
+                console.error("Error al guardar en Firebase: ", error);
+            });
+        }
+    
+        // Escuchar cambios en tiempo real y actualizar la tabla
+        itemsCollection.orderBy('id').onSnapshot(snapshot => {
+            tableBody.innerHTML = '';
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const newRow = document.createElement('tr');
+                newRow.setAttribute('data-id', data.id); // Añadir atributo data-id
+                newRow.innerHTML = `
+                    <td><i class="fas fa-eye"></i></td>
+                    <td>${data.id}</td>
+                    <td>${data.empresa}</td>
+                    <td>${data.nombreArchivo}</td>
+                    <td>${data.cantidadItems}</td>
+                    <td>${data.cajaEvaluada}</td>
+                    <td>${data.pendientes}</td>
+                `;
+                newRow.addEventListener('dblclick', () => {
+                    const fileName = `tablas/tabla${data.id}.html`; // Patrón con id completo
+                    openSecondaryTable(fileName);
+                });
+                tableBody.appendChild(newRow);
+            });
+        }, error => {
+            console.error("Error al escuchar cambios: ", error);
+        });
+    
+        // Función para abrir la tabla secundaria desde un archivo externo
+        function openSecondaryTable(fileName) {
+            document.body.classList.add('modal-open');
+            secondaryTableModal.style.display = 'block';
+            secondaryContent.innerHTML = '<p>Cargando...</p>';
+    
+            fetch(fileName)
+                .then(response => {
+                    if (!response.ok) throw new Error('Archivo no encontrado');
+                    return response.text();
+                })
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Insertar el contenido del <body> en secondaryContent
+                    const bodyContent = doc.body.innerHTML;
+                    secondaryContent.innerHTML = bodyContent;
+    
+                    // Extraer y ejecutar los scripts incluidos
+                    const scripts = doc.getElementsByTagName('script');
+                    for (let script of scripts) {
+                        if (script.textContent) {
+                            const newScript = document.createElement('script');
+                            newScript.textContent = script.textContent;
+                            window.top.document.body.appendChild(newScript);
+                            console.log("Script ejecutado desde:", fileName);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al cargar el archivo:", error);
+                    secondaryContent.innerHTML = '<p>Error al cargar los detalles. Verifica el archivo.</p>';
+                });
+        }
+    
+        // Cerrar el modal secundario
+        closeSecondaryBtn.onclick = function() {
+            secondaryTableModal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+    
+        window.onclick = function(event) {
+            if (event.target == secondaryTableModal) {
+                secondaryTableModal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            } else if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tabla de Facturas</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <link rel="stylesheet" href="tabla-ingresos.css">
+    </head>
+    <body>
+        <div class="container" id="main-container">
+            <h1 id="main-title">Tabla de Facturas <i class="fas fa-table fa-lg"></i></h1>
+            <div class="division" id="division-line"></div>   
+
+            <div class="outer-container" id="tableContainer">
+                <div class="month-filter">
+                    <label for="monthSelector">Mes: </label>
+                    <select id="monthSelector"></select>
+                    <label for="yearSelector">Año: </label>
+                    <select id="yearSelector"></select>
+                    <button id="btnDownload" class="btn-download">Descargar Excel <i class="fas fa-download"></i></button>
+                </div>
+                <div class="table-container" id="codigosTable" style="display:block;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(0)"><i class="fas fa-filter"></i></span>ID
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(0)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(1)"><i class="fas fa-filter"></i></span>Fecha de Ingreso
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(1)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(2)"><i class="fas fa-filter"></i></span>Factura
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(2)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(3)"><i class="fas fa-filter"></i></span>Emisión de Factura
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(3)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(4)"><i class="fas fa-filter"></i></span>Monto de la Factura
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(4)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(5)"><i class="fas fa-filter"></i></span>OC
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(5)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(6)"><i class="fas fa-filter"></i></span>Fecha de OC
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(6)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(7)"><i class="fas fa-filter"></i></span>Proveedor
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(7)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(8)"><i class="fas fa-filter"></i></span>Acta
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(8)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(9)"><i class="fas fa-filter"></i></span>Fecha de Salida
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(9)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(10)"><i class="fas fa-filter"></i></span>Número de Salida
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(10)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(11)"><i class="fas fa-filter"></i></span>Mes de Ingreso
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(11)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(12)"><i class="fas fa-filter"></i></span>Año de Ingreso
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(12)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(13)"><i class="fas fa-filter"></i></span>Mes de Salida
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(13)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(14)"><i class="fas fa-filter"></i></span>Año de Salida
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(14)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                                <th>
+                                    <span class="filter-icon" onclick="toggleFilter(15)"><i class="fas fa-filter"></i></span>Usuario
+                                    <input type="text" class="filter-input hidden" onkeyup="filterTable(15)" placeholder="Filtrar...">
+                                    <span class="resizer"></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody> 
+                    </table>
+                </div>
+
+                <div id="pagination">
+                    <button id="btnPrevious"><i class="fas fa-chevron-left"></i> Anterior</button>
+                    <span id="pageNumber">Página 1 de </span>
+                    <button id="btnNext">Siguiente <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <script src="resizer.js"></script>
+            <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+            <script type="module" src="tabla-ingresos.js"></script>
+        </div>
+    </body>
+</html>

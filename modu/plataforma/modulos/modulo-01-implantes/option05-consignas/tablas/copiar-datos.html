@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copiar Datos de Fijadores1 a Fijadores2</title>
+</head>
+<body>
+    <h1>Copiar Datos de Fijadores1 a Fijadores2</h1>
+    <button onclick="copiarDatos()">Copiar Datos</button>
+    <p id="resultado"></p>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js';
+        import { getFirestore, collection, getDocs, addDoc } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDXPdub3tHM9K2zUViBuC05CL6M-zE_IM4",
+            authDomain: "cajas-11e7b.firebaseapp.com",
+            projectId: "cajas-11e7b",
+            storageBucket: "cajas-11e7b.firebasestorage.app",
+            messagingSenderId: "106380626220",
+            appId: "1:106380626220:web:4a1741a20624bc177a8489",
+            measurementId: "G-MZZYHPPECZ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function copiarDatos() {
+            try {
+                const resultado = document.getElementById('resultado');
+                resultado.textContent = 'Copiando datos...';
+
+                // Obtener todos los documentos de la colección fijadores1
+                const querySnapshot = await getDocs(collection(db, 'fijadores1'));
+                const documentos = [];
+                querySnapshot.forEach((doc) => {
+                    documentos.push(doc.data());
+                });
+
+                // Copiar cada documento a la colección fijadores2
+                for (const docData of documentos) {
+                    await addDoc(collection(db, 'fijadores2'), {
+                        id: docData.id,
+                        codigo: docData.codigo,
+                        descripcion: docData.descripcion,
+                        ideal: docData.ideal,
+                        cantidad: docData.cantidad,
+                        precio: docData.precio
+                    });
+                }
+
+                resultado.textContent = `Se copiaron ${documentos.length} documentos de fijadores1 a fijadores2 con éxito.`;
+            } catch (error) {
+                console.error('Error al copiar datos:', error);
+                document.getElementById('resultado').textContent = 'Error al copiar los datos. Revisa la consola para más detalles.';
+            }
+        }
+
+        // Hacer la función accesible globalmente
+        window.copiarDatos = copiarDatos;
+    </script>
+</body>
+</html>

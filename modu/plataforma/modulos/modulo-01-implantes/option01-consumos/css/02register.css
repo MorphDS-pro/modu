@@ -1,0 +1,201 @@
+.form-register-container {
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.form-register-container h2 {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #333;
+    text-align: start;
+}
+
+.form-row-register {
+    display: flex;
+    gap: 5px;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.form-group-register {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    margin-bottom: 0;
+}
+
+.form-group-register label {
+    display: block;
+    font-size: 11px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group-register input {
+    width: 100%;
+    height: 25px;
+    padding: 5px;
+    font-size: 11px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.form-group-register input::placeholder {
+    color: #c5c5c5;
+}
+
+.form-group-register input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.8);
+    outline: none;
+}
+
+.bttn-container-register {
+    display: flex;
+    gap: 5px;
+    justify-content: start;
+    margin-top: 17px;
+}
+
+.btn-save-register,
+.btn-reset-register {
+    padding: 6px 10px;
+    font-size: 11px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.btn-save-register {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-save-register:hover {
+    background-color: #45a049;
+    outline: 2px solid #45a049;
+    outline-offset: 2px;
+}
+
+.btn-save-register i {
+    color: white;
+    margin-right: 5px;
+}
+
+.btn-reset-register {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-reset-register:hover {
+    background-color: #c0392b;
+    outline: 2px solid #c0392b;
+    outline-offset: 2px;
+}
+
+.btn-reset-register i {
+    color: white;
+    margin-right: 5px;
+}
+
+@media (max-width: 1200px) {
+    .form-register-container {
+        padding: 10px;
+    }
+    .form-register-container h2 {
+        font-size: 15px;
+    }
+    .form-row-register {
+        gap: 8px;
+    }
+    .form-group-register {
+        flex: 1;
+    }
+    .form-group-register input {
+        padding: 6px;
+        font-size: 12px;
+    }
+    .btn-save-register, .btn-reset-register {
+        padding: 7px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-register-container {
+        padding: 8px;
+        margin: 0 5px;
+    }
+    .form-register-container h2 {
+        font-size: 14px;
+    }
+    .form-row-register {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .form-group-register {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .form-group-register input {
+        height: 30px;
+        padding: 8px;
+        font-size: 13px;
+    }
+    .bttn-container-register {
+        margin-top: 15px;
+    }
+    .btn-save-register, .btn-reset-register {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-register-container {
+        padding: 6px;
+        border-radius: 3px;
+        margin: 0;
+    }
+    .form-register-container h2 {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+    .form-row-register {
+        gap: 8px;
+    }
+    .form-group-register {
+        width: 100%;
+    }
+    .form-group-register label {
+        font-size: 10px;
+        margin-bottom: 3px;
+    }
+    .form-group-register input {
+        height: 28px;
+        padding: 6px;
+        font-size: 12px;
+        border-radius: 3px;
+    }
+    .bttn-container-register {
+        margin-top: 12px;
+        gap: 8px;
+    }
+    .btn-save-register, .btn-reset-register {
+        padding: 7px 12px;
+        font-size: 12px;
+        border-radius: 3px;
+    }
+}

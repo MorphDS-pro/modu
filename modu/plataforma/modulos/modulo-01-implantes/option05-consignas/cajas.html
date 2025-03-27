@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cajas</title>
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1500px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, #dfe4ea, #3498db, #dfe4ea);
+            margin: 20px 0;
+        }
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        button {
+            width: 300px;
+            padding: 24px;
+            background-color: #f0f0f0;
+            color: #2c3e50;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #e7e5e5;
+        }
+        button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(84, 93, 99, 0.3);
+        }
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px auto;
+                padding: 10px;
+                max-width: 100%; 
+            }
+            h1 {
+                font-size: 20px; 
+            }
+            .button-row {
+                flex-direction: column;
+                align-items: center; 
+                gap: 5px; /
+            }
+            button {
+                width: 90%; 
+                max-width: 280px;
+                padding: 10px;
+                font-size: 14px; 
+            }
+            hr {
+                margin: 10px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 18px;
+            }
+            button {
+                padding: 8px; 
+                font-size: 10px;
+            }
+            .container {
+                margin: 5px auto; 
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="content" class="container hidden">
+        <h1>Cajas</h1>
+        <hr>
+        
+        <div class="button-row">
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/tablas/fijadores-1.html">Fijadores #1</button>
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/tablas/fijadores-2.html">Fijadores #2</button>
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/fijadores-3.html">Fijadores #3</button>
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/fibras-laser.html">Fibras Láser</button>
+        </div>
+
+        <div class="button-row">
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/pequenos-fragmentos-curico.html">Pequeños fragmentos Curico</button>
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/pequenos-fragmentos-talca.html">Pequeños fragmentos Talca</button>
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/pequenos-fragmentos-talca-2.html">Pequeños fragmentos Talca (2)</button>
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/grandes-fragmentos-mutual.html">Grandes fragmentos mutual</button>
+        </div>
+
+        <div class="button-row">
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/angio.html">Angio</button>
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/promedon.html">Promedon</button>
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/synthes.html">Synthes</button>
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/osteotrauma.html">Osteotrauma</button>
+        </div>
+
+        <div class="button-row">
+            <button data-target="modulos/plataformaWeb-modulo-04-implantes/adm-option05-consignas/spinex.html">Spinex</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDsSD0EcY_QKPcqycpiynXg--mO9VMvRDs",
+            authDomain: "usuarios-d4364.firebaseapp.com",
+            projectId: "usuarios-d4364",
+            storageBucket: "usuarios-d4364.firebasestorage.app",
+            messagingSenderId: "1050588492432",
+            appId: "1:1050588492432:web:5803cad6718dfa36a09e15",
+            measurementId: "G-SZD8728PHP"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            const content = document.getElementById('content');
+            const userId = sessionStorage.getItem('userId');
+            const roles = JSON.parse(sessionStorage.getItem('roles') || '[]');
+
+            if (user && userId && roles.length > 0) {
+                content.classList.remove('hidden');
+            } else {
+                window.location.href = '../../../../login.html';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('button[data-target]');
+            buttons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = button.getAttribute('data-target');
+                    if (window.parent && window.parent.cargarFormulario) {
+                        window.parent.cargarFormulario(target);
+                    } else {
+                        console.error('No se pudo acceder a la función cargarFormulario del padre.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
