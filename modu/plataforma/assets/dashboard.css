@@ -4,7 +4,7 @@ body {
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100px;
     overflow: hidden;
 }
 
@@ -14,25 +14,26 @@ body {
     display: flex;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     position: relative;
-    height: 3vh;
+    height: 30px;
     justify-content: space-between;
 }
 
 .sidebar {
     background-color: #f9f9f9;
-    width: 22vh;
+    width: 200px;
     padding: 10px 20px;
-    height: 91vh;
-    top: 6vh;
+    height: 845px;
+    top: 55px;
     position: fixed;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .main-content {
     background-color: #f9f9f9;
-    height: 94vh;
-    margin-left: 27vh;
-    margin-right: 1vh;
+    height: 870px;
+    margin-left: 245px;
+    margin-right: 0px;
+    top: 55px;
     overflow: hidden;
     flex-grow: 1;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
